@@ -3,6 +3,7 @@ import { Application, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/db';
+import { errorHandler, notFound } from './middlewares/errorMiddleware';
 
 // Routes
 import userRoutes from './routes/userRoutes';
@@ -23,6 +24,9 @@ app.get("/api", (req: Request, res: Response)  => {
 
 // User Route
 app.use("/api/users", userRoutes);
+
+app.use(errorHandler);
+app.use(notFound);
 
 const PORT = process.env.PORT || 5000;
 

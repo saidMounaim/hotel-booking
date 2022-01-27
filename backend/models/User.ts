@@ -7,8 +7,10 @@ export interface IUser extends mongoose.Document {
     email: string,
     password: string,
     avatar?: string,
+    isAdmin: boolean,
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
+    comparePassword(entredPassword: string): Promise<Boolean> 
 
 }
 
@@ -38,6 +40,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
     },
 
+    isAdmin: {
+        type: Boolean,
+        default: false,
+    }
+
 }, {
     timestamps: true
 });
@@ -56,6 +63,11 @@ UserSchema.pre("save", async function(next) {
     next();
 
 })
+
+UserSchema.methods.comparePassword = function(entredPassword: string) {
+    const user = this as IUser;
+    return bcrypt.compareSync(entredPassword, user.password);
+}
 
 const User = mongoose.model<IUser>("User", UserSchema);
 
