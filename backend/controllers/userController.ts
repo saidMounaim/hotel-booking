@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import User from "../models/User";
+import generateToken from "../utils/generateToken";
 
 // @Desc Register user
 // @Route /api/users/register
@@ -16,7 +17,14 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
 
   await user.save();
 
-  res.status(201).json(user);
+  res.status(201).json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id)
+  });
 });
 
 
@@ -36,16 +44,14 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 
   if(await user.comparePassword(password)) {
 
-    res.status(201).json({ 
-
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin
-      }
-
-    })
+    res.status(201).json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id)
+    });
 
   } else {
     res.status(401);

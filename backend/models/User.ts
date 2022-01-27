@@ -8,6 +8,7 @@ export interface IUser extends mongoose.Document {
     password: string,
     avatar?: string,
     isAdmin: boolean,
+    token?: string,
     createdAt: Date,
     updatedAt: Date,
     comparePassword(entredPassword: string): Promise<Boolean> 
