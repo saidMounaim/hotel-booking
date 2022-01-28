@@ -1,5 +1,10 @@
+import { Request } from 'express';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+
+export interface IUserRequest extends Request {
+    user?: any
+}
 
 export interface IUser extends mongoose.Document {
 

@@ -18,6 +18,7 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+
 // Default 
 app.get("/api", (req: Request, res: Response)  => {
     res.status(201).json({ message: "Welcome to Hotel Booking App" });
