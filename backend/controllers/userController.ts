@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
+import bcrypt from 'bcrypt';
 import User, { IUserRequest } from "../models/User";
 import generateToken from "../utils/generateToken";
 
@@ -80,5 +81,30 @@ export const updateProfile = asyncHandler(async (req: IUserRequest, res: Respons
   }, { new: true }).select("-password");
 
   res.status(201).json(user);
+
+})
+
+// @Desc Update password
+// @Route /api/users/update/password
+// @Method PUT
+export const updatePassword = asyncHandler(async(req: IUserRequest, res: Response) => {
+
+  let user = await User.findById(req.user.id);
+
+  if(!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  const { password } = req.body;
+
+  const salt = bcrypt.genSaltSync(10);
+  const hash = bcrypt.hashSync(password, salt);
+
+  user = await User.findByIdAndUpdate(req.user.id, {
+    password: hash
+  }, { new: true });
+
+  res.status(201).json(user); 
 
 })
