@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
-import User from "../models/User";
+import User, { IUserRequest } from "../models/User";
 import generateToken from "../utils/generateToken";
 
 // @Desc Register user
@@ -58,5 +58,27 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     res.status(401);
     throw new Error("Email or password incorrect");
   }
+
+})
+
+// @Desc Update profile
+// @Route /api/users/update
+// @Method PUT
+export const updateProfile = asyncHandler(async (req: IUserRequest, res: Response) => {
+
+  let user = await User.findById(req.user.id);
+
+  if(!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  const { name, email, avatar } = req.body;
+
+  user = await User.findByIdAndUpdate(req.user.id, {
+    name, email, avatar
+  }, { new: true }).select("-password");
+
+  res.status(201).json(user);
 
 })
