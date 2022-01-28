@@ -7,12 +7,13 @@ import generateToken from "../utils/generateToken";
 // @Route /api/users/register
 // @Method POST
 export const register = asyncHandler(async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, avatar } = req.body;
 
   const user = new User({
     name,
     email,
     password,
+    avatar
   });
 
   await user.save();
