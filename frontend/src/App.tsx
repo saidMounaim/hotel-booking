@@ -1,11 +1,17 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
+import HomeScreen from './screens/HomeScreen';
 
 function App() {
   return (
-    <div className="App">
-      <h1>Hello From Frontend</h1>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Routes>
+            <Route index element={<HomeScreen />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
