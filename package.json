@@ -4,7 +4,8 @@
   "description": "Hotel Booking App Using MERN Stack With TypeScript & Redux",
   "main": "server.ts",
   "scripts": {
-    "server": "ts-node-dev backend/server.ts"
+    "server": "ts-node-dev backend/server.ts",
+    "client": "npm start --prefix frontend"
   },
   "keywords": [],
   "author": "Said MOUNAIM",
