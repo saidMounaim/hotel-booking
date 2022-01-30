@@ -4,6 +4,7 @@ import { useSelector, useDispatch, RootStateOrAny } from 'react-redux';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { login } from '../redux/actions/UserActions';
 import Message from '../components/Message';
+import Loader from '../components/Loader';
 
 interface IUser {
     email: string,
@@ -18,19 +19,19 @@ const LoginScreen: React.FC = () => {
     const [email, setEmail] = useState<IUser['email']>("");
     const [password, setPassword] = useState<IUser['password']>("");
 
-    const { userInfo, error, success } = useSelector((state: RootStateOrAny) => state.userLogin);
+    const { userInfo, loading, error, success } = useSelector((state: RootStateOrAny) => state.userLogin);
 
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-            dispatch(login({ email, password }));
+        dispatch(login({ email, password }));
     }
 
     useEffect(() => {
-        if(success) {
+        if(success || userInfo) {
             navigate("/");
         }
-    }, [userInfo, success]);
+    }, [userInfo, success, dispatch]);
     
 
   return (
@@ -62,7 +63,7 @@ const LoginScreen: React.FC = () => {
                     </Form.Group>
                     <Form.Group>
                         <Button variant="primary" type="submit">
-                            Login
+                            {loading ? <Loader /> : `Login`}
                         </Button>
                     </Form.Group>
                 </Form>

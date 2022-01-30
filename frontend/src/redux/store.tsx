@@ -8,7 +8,13 @@ const rootReducers = combineReducers({
   userLogin: userLoginReducer
 });
 
-const initialState = {};
+const userInfoFromStorage = JSON.parse(localStorage.getItem("userInfo")!);
+
+const initialState = {
+  userLogin: {
+    userInfo: userInfoFromStorage
+  }
+};
 
 const store = createStore(
   rootReducers,

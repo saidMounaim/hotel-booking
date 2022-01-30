@@ -1,6 +1,6 @@
 import * as actions from '../constants/UserConstants';
 
-export const userLoginReducer = (state = { userInfo: {} }, action: any) => {
+export const userLoginReducer = (state = {}, action: any) => {
 
     switch (action.type) {
         case actions.USER_LOGIN_REQUEST:
