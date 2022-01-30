@@ -31,3 +31,10 @@ export const login = (user: {}) => async (dispatch: Dispatch) => {
     }
 
 }
+
+export const logout = () => async (dispatch: Dispatch) => {
+
+    dispatch({ type: actions.USER_LOGOUT });
+    localStorage.removeItem("userInfo");
+
+}

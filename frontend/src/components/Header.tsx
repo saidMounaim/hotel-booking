@@ -1,14 +1,18 @@
 import React from "react";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { useSelector, RootStateOrAny } from 'react-redux';
+import { useDispatch, useSelector, RootStateOrAny } from 'react-redux';
+import { logout } from '../redux/actions/UserActions';
+
 
 const Header: React.FC = () => {
 
+
+  const dispatch = useDispatch();
   const { userInfo } = useSelector((state: RootStateOrAny) => state.userLogin); 
 
   const handleLogout = () => {
-    console.log("Logout");
+    dispatch(logout());
   }
 
   return (
