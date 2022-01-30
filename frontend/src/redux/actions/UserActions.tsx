@@ -88,6 +88,7 @@ export const updateProfile = (user: {}) => async (dispatch: Dispatch, getState: 
         const { data } = await axios.put("/api/users/update", user, config);
 
         dispatch({ type: actions.UPDATE_PROFILE_SUCCESS });
+        dispatch({ type: actions.USER_LOGIN_SUCCESS, payload: data });
         localStorage.setItem("userInfo", JSON.stringify(data));
 
     } catch (error: any) {
