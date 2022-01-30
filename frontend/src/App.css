@@ -3,3 +3,16 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.dropdown-avatar .dropdown-toggle::after {
+  position: absolute;
+  right: -11px;
+  top: 28px;
+}

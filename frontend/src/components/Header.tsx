@@ -32,7 +32,12 @@ const Header: React.FC = () => {
           </Nav>
           <Nav className="ml-auto">
             {userInfo ? 
-            <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
+            <NavDropdown className="dropdown-avatar" title={
+              <div className="d-flex align-items-center">
+                <Image className="avatar" src={userInfo.avatar} alt="Avatar" />
+                {userInfo.name}
+              </div>
+            } id="basic-nav-dropdown">
               <LinkContainer to="/account/profile">
                 <NavDropdown.Item>Profile</NavDropdown.Item>
               </LinkContainer>
