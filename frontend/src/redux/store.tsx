@@ -1,11 +1,12 @@
 import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
-import { userLoginReducer } from './reducers/UserReducers';
+import { userLoginReducer, userRegisterReducer } from './reducers/UserReducers';
 
 const composeEnhancer = (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
 const rootReducers = combineReducers({
-  userLogin: userLoginReducer
+  userLogin: userLoginReducer,
+  userRegister: userRegisterReducer
 });
 
 const userInfoFromStorage = JSON.parse(localStorage.getItem("userInfo")!);
