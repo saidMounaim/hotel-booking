@@ -5,6 +5,7 @@ import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
+import PasswordScreen from './screens/PasswordScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import RegisterScreen from './screens/RegisterScreen';
 
@@ -20,6 +21,9 @@ function App() {
               <Route path="/register" element={<RegisterScreen />} />
               <Route path="/account/profile" element={<ProtectedRoute />} >
                 <Route path="/account/profile" element={<ProfileScreen />} />
+              </Route>
+              <Route path="/account/password" element={<ProtectedRoute />} >
+                <Route path="/account/password" element={<PasswordScreen />} />
               </Route>
           </Routes>
         </div>

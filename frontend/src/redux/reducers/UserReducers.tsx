@@ -74,3 +74,26 @@ export const profileUpdateReducer = (state = {}, action: any) => {
     }
 
 }
+
+export const passwordUpdateReducer = (state = {}, action: any) => {
+
+    switch (action.type) {
+        case actions.UPDATE_PASSWORD_REQUEST:
+            return {
+                loading: true
+            };
+        case actions.UPDATE_PASSWORD_SUCCESS:
+            return {
+                loading: false,
+                success: true,
+            };
+        case actions.UPDATE_PASSWORD_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            };
+        default:
+            return state;
+    }
+
+}

@@ -106,3 +106,40 @@ export const updateProfile = (user: {}) => async (dispatch: Dispatch, getState: 
     }
 
 }
+
+export const updatePassword = (user: {}) => async (dispatch: Dispatch, getState: any) => {
+
+    try {
+        
+        dispatch({ type: actions.UPDATE_PASSWORD_REQUEST });
+
+        const { userLogin: { userInfo } } = getState();
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${userInfo.token}`
+            }
+        };
+
+        const { data } = await axios.put("/api/users/update/password", user, config);
+
+        dispatch({ type: actions.UPDATE_PASSWORD_SUCCESS });
+        dispatch({ type: actions.USER_LOGIN_SUCCESS, payload: data });
+        localStorage.setItem("userInfo", JSON.stringify(data));
+
+    } catch (error: any) {
+        const message =
+        error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        if (message === "no token, no auth") {
+            dispatch<any>(logout());
+        }
+        dispatch({
+        type: actions.UPDATE_PASSWORD_FAIL,
+        payload: message
+        });
+    }
+
+}

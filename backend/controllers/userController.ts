@@ -103,15 +103,29 @@ export const updatePassword = asyncHandler(async(req: IUserRequest, res: Respons
     throw new Error("User not found");
   }
 
-  const { password } = req.body;
+  const { oldPassword, newPassword } = req.body;
 
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(password, salt);
+  if((await user.comparePassword(oldPassword))) {
 
-  user = await User.findByIdAndUpdate(req.user.id, {
-    password: hash
-  }, { new: true });
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(newPassword, salt);
 
-  res.status(201).json(user); 
+    user = await User.findByIdAndUpdate(req.user.id, {
+      password: hash
+    }, { new: true });
+
+    res.status(201).json({
+      id: user?._id,
+      name: user?.name,
+      email: user?.email,
+      avatar: user?.avatar,
+      isAdmin: user?.isAdmin,
+      token: generateToken(user?._id)
+    });
+
+  } else {
+    res.status(401);
+    throw new Error("Old password incorrect");
+  }
 
 })
