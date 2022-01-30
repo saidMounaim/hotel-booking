@@ -26,7 +26,7 @@ export const protect = asyncHandler (async(req: IUserRequest, res: Response, nex
 
     if(!token) {
         res.status(401);
-        throw new Error("Token not found");
+        throw new Error("no token, no auth");
     }
 
 })

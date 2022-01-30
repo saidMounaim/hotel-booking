@@ -80,7 +80,14 @@ export const updateProfile = asyncHandler(async (req: IUserRequest, res: Respons
     name, email, avatar
   }, { new: true }).select("-password");
 
-  res.status(201).json(user);
+  res.status(201).json({
+    id: user?._id,
+    name: user?.name,
+    email: user?.email,
+    avatar: user?.avatar,
+    isAdmin: user?.isAdmin,
+    token: generateToken(user?._id)
+  });
 
 })
 
