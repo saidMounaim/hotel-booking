@@ -7,6 +7,7 @@ import connectDB from './config/db';
 import { errorHandler, notFound } from './middlewares/errorMiddleware';
 
 // Routes
+import roomRoutes from './routes/roomRoutes';
 import userRoutes from './routes/userRoutes';
 import uploadRoutes from './routes/uploadRoutes';
 
@@ -26,6 +27,8 @@ app.get("/api", (req: Request, res: Response)  => {
     res.status(201).json({ message: "Welcome to Hotel Booking App" });
 })
 
+// Room Route
+app.use("/api/rooms", roomRoutes);
 
 // User Route
 app.use("/api/users", userRoutes);
