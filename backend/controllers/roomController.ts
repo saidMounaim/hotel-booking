@@ -57,3 +57,21 @@ export const updateRoom = asyncHandler(async (req: IUserRequest, res: Response) 
     res.status(201).json(room);
 
 })
+
+// @Desc Delete room
+// @Route /api/rooms/:id
+// @Method DELETE
+export const deleteRoom = asyncHandler(async (req: IUserRequest, res: Response) => {
+
+    let room = await Room.findById(req.params.id);
+
+    if(!room) {
+        res.status(401);
+        throw new Error("Room not found");
+    }
+
+    room = await Room.findByIdAndDelete(req.params.id);
+
+    res.status(201).json({});
+
+})
