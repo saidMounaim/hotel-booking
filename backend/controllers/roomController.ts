@@ -39,3 +39,21 @@ export const addRoom = asyncHandler(async (req: IUserRequest, res: Response) => 
     res.status(201).json(room);
 
 })
+
+// @Desc Update room
+// @Route /api/rooms/:id
+// @Method PUT
+export const updateRoom = asyncHandler(async (req: IUserRequest, res: Response) => {
+
+    let room = await Room.findById(req.params.id);
+
+    if(!room) {
+        res.status(401);
+        throw new Error("Room not found");
+    }
+
+    room = await Room.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+    res.status(201).json(room);
+
+})
