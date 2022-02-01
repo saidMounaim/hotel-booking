@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import Room from '../models/Room';
+import { IUserRequest } from '../models/User';
 
 // @Desc Get All Rooms
 // @Route /api/rooms
@@ -21,6 +22,19 @@ export const getSingle = asyncHandler(async (req: Request, res: Response) => {
         res.status(401);
         throw new Error("Room not found");
     }
+
+    res.status(201).json(room);
+
+})
+
+// @Desc Create new room
+// @Route /api/rooms
+// @Method POST
+export const addRoom = asyncHandler(async (req: IUserRequest, res: Response) => {
+
+    req.body.user = req.user._id;
+
+    const room = await Room.create(req.body);
 
     res.status(201).json(room);
 
