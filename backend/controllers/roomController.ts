@@ -75,3 +75,44 @@ export const deleteRoom = asyncHandler(async (req: IUserRequest, res: Response) 
     res.status(201).json({});
 
 })
+
+// @Desc Create Room Review
+// @Route /api/rooms/:id/reviews
+// @Method POST
+export const createRoomReview = asyncHandler(async (req: IUserRequest, res: Response) => {
+
+    const room = await Room.findById(req.params.id);
+
+    if(room) {
+
+        const alreadyReviewd = room.reviews?.find(review => review.user.toString() === req.user._id.toString());
+
+        if(alreadyReviewd) {
+            res.status(401);
+            throw new Error("Already reviewed");
+        }
+
+        const { rating, comment } = req.body;
+
+        const review = {
+            user: req.user._id,
+            rating: Number(rating),
+            comment,
+        }
+
+        room.reviews?.push(review);
+
+        room.numOfReviews = room.reviews?.length;
+
+        room.ratings = room.reviews?.reduce((acc: any, item: any) => item?.rating + acc, 0) / Number(room.reviews?.length);
+
+        await room.save();
+
+        res.status(201).json({ message: "Review added" });
+
+    } else {
+        res.status(401);
+        throw new Error("Room not found");
+    }
+
+})
