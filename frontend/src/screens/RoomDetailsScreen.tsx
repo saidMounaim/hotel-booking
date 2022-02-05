@@ -49,7 +49,7 @@ const RoomDetailsScreen = () => {
                 <Col>
                     <h1 className="mb-2">{room.name}</h1>
                     <span className="d-block mb-2">{room.address}</span>
-                    <Rating reviews={room.numOfReviews} />
+                    <Rating reviews={room.ratings} />
                     <div className="carousel-room mt-3 mb-3">
                         <Carousel>
                             {room.images?.map((img: any) =>
@@ -104,6 +104,20 @@ const RoomDetailsScreen = () => {
                                     }
                                     Room Cleaning
                                 </ListGroup.Item>
+                            </ListGroup>
+
+                            <h4 className="mt-3 mb-4">Reviews</h4>
+
+                            <ListGroup>
+                                {room.reviews?.map((r: any) =>
+                                    <ListGroup.Item>
+                                        <h4>{r.name}</h4>
+                                        <Rating reviews={r.rating} />
+                                        <p>
+                                            {r.comment}
+                                        </p>
+                                    </ListGroup.Item>
+                                )}
                             </ListGroup>
                         </Col>
                         <Col xs={12} sm={12} md={5}>

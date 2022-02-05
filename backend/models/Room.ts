@@ -1,11 +1,8 @@
 import mongoose from 'mongoose';
 
 interface IReviews {   
-    user: {
-        type: mongoose.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
+    user: string,
+    name: string,
     rating: number,
     comment: string
 }
@@ -115,6 +112,10 @@ const RoomSchema = new mongoose.Schema({
                 type: mongoose.Types.ObjectId,
                 ref: 'User',
                 required: true
+            },
+            name: {
+                type: String,
+                required: true,
             },
             rating: {
                 type: Number,

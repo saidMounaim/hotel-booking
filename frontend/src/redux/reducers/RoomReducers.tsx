@@ -38,7 +38,7 @@ export const roomDetailsReducer = (state = { room: {} }, action: AnyAction) => {
                 loading: false,
                 room: action.payload
             };
-        case actions.FETCH_ROOMS_FAIL:
+        case actions.ROOM_DETAILS_FAIL:
             return {
                 loading: false,
                 error: action.payload
