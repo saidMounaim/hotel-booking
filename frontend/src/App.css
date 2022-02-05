@@ -16,3 +16,12 @@
   right: -11px;
   top: 28px;
 }
+
+.card-room {
+  border: none;
+}
+
+.card-room img {
+  height: 200px;
+  border-radius: 20px;
+}
