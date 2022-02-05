@@ -25,3 +25,12 @@
   height: 200px;
   border-radius: 20px;
 }
+
+.rating {
+  display: flex;
+  align-items: center;
+}
+
+.rating i {
+  margin-right: 3px;
+}

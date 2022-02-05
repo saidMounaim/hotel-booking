@@ -13,6 +13,7 @@
     "@types/react-bootstrap": "^0.32.29",
     "@types/react-dom": "^17.0.9",
     "axios": "^0.25.0",
+    "bootstrap-icons": "^1.8.0",
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.1",
     "react-dom": "^17.0.2",
