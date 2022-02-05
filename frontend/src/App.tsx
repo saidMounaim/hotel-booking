@@ -8,6 +8,7 @@ import LoginScreen from './screens/LoginScreen';
 import PasswordScreen from './screens/PasswordScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import RoomDetailsScreen from './screens/RoomDetailsScreen';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               <Route path="/account/password" element={<ProtectedRoute />} >
                 <Route path="/account/password" element={<PasswordScreen />} />
               </Route>
+              <Route path="/room/:id" element={<RoomDetailsScreen />} />
           </Routes>
         </div>
       </div>

@@ -26,3 +26,24 @@ export const roomsFetchReducer = (state = initialState, action: AnyAction) => {
             return state;
     }
 }
+
+export const roomDetailsReducer = (state = { room: {} }, action: AnyAction) => {
+    switch (action.type) {
+        case actions.ROOM_DETAILS_REQUEST:
+            return {
+                loading: true
+            };
+        case actions.ROOM_DETAILS_SUCCESS:
+            return {
+                loading: false,
+                room: action.payload
+            };
+        case actions.FETCH_ROOMS_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default:
+            return state;
+    }
+}
