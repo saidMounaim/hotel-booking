@@ -34,3 +34,18 @@
 .rating i {
   margin-right: 3px;
 }
+
+.carousel-room img {
+  height: 60vh;
+  object-fit: cover;
+}
+
+.list-group-item {
+  background-color: transparent;
+  color: black;
+  font-size: 20px;
+}
+
+.list-group-item:hover {
+  color: inherit;
+}

@@ -16,6 +16,7 @@
     "bootstrap-icons": "^1.8.0",
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.1",
+    "react-datepicker": "^4.6.0",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
     "react-router-bootstrap": "^0.26.0",
@@ -51,6 +52,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-datepicker": "^4.3.4",
     "@types/react-router-bootstrap": "^0.24.5"
   }
 }
