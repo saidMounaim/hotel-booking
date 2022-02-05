@@ -6,12 +6,7 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { updateProfile } from '../redux/actions/UserActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-
-interface IUser {
-    name: string,
-    email: string,
-    avatar?: string
-}
+import { IUser } from '../interfaces/IUser';
 
 const ProfileScreen: React.FC = () => {
 

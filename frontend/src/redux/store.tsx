@@ -1,6 +1,7 @@
 import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
 import { userLoginReducer, userRegisterReducer, profileUpdateReducer, passwordUpdateReducer } from './reducers/UserReducers';
+import {roomsFetchReducer} from './reducers/RoomReducers';
 
 const composeEnhancer = (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
@@ -8,7 +9,8 @@ const rootReducers = combineReducers({
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   profileUpdate: profileUpdateReducer,
-  passwordUpdate: passwordUpdateReducer
+  passwordUpdate: passwordUpdateReducer,
+  roomsFetch: roomsFetchReducer
 });
 
 const userInfoFromStorage = JSON.parse(localStorage.getItem("userInfo")!);

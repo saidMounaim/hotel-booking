@@ -6,7 +6,7 @@ import { login } from '../redux/actions/UserActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 
-interface IUser {
+type IUser = {
     email: string,
     password: string
 }
