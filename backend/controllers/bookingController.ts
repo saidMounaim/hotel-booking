@@ -24,3 +24,32 @@ export const newBooking = asyncHandler(async (req: IUserRequest, res: Response) 
     res.status(201).json(booking);
 
 })
+
+// @Desc Check room is available for booking
+// @Route /api/bookings/check
+// @Method POST
+export const checkRoomIsAvailble = asyncHandler(async (req: Request, res: Response) => {
+
+    const { roomId, checkInDate, checkOutDate } = req.body;
+
+    const room = await Booking.find({ room: roomId, $and: [{
+            checkInDate: {
+                $lte: checkOutDate
+            }
+        }, {
+            checkOutDate: {
+                $gte: checkInDate
+            }
+        }]});
+
+    let roomAvailable;
+
+    if(room && room.length === 0) {
+        roomAvailable = true;
+    } else {
+        roomAvailable = false;
+    }
+
+    res.status(201).json({ roomAvailable });
+
+})
