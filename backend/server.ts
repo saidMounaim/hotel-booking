@@ -9,6 +9,7 @@ import { errorHandler, notFound } from './middlewares/errorMiddleware';
 // Routes
 import roomRoutes from './routes/roomRoutes';
 import userRoutes from './routes/userRoutes';
+import bookingRoutes from './routes/bookingRoutes';
 import uploadRoutes from './routes/uploadRoutes';
 
 const app: Application = express();
@@ -32,6 +33,9 @@ app.use("/api/rooms", roomRoutes);
 
 // User Route
 app.use("/api/users", userRoutes);
+
+// Booking Route
+app.use("/api/bookings", bookingRoutes);
 
 // Upload Route
 app.use("/api/uploads", uploadRoutes);
