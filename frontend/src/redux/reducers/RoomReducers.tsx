@@ -47,3 +47,24 @@ export const roomDetailsReducer = (state = { room: {} }, action: AnyAction) => {
             return state;
     }
 }
+
+export const roomCreateReviewReducer = (state = {}, action: AnyAction) => {
+    switch (action.type) {
+        case actions.ROOM_CREATE_REVIEW_REQUEST:
+            return {
+                loading: true
+            };
+        case actions.ROOM_CREATE_REVIEW_SUCCESS:
+            return {
+                loading: false,
+                success: true
+            };
+        case actions.ROOM_CREATE_REVIEW_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default:
+            return state;
+    }
+}

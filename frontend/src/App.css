@@ -49,3 +49,19 @@
 .list-group-item:hover {
   color: inherit;
 }
+
+.field-rating button {
+  background-color: transparent !important;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.field-rating .on {
+  color: #000;
+}
+
+.field-rating .off {
+  color: #ccc;
+}
