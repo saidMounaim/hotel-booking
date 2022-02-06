@@ -12,6 +12,7 @@ import Rating from '../components/Rating';
 import { createRoomReview } from '../redux/actions/RoomActions';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { Link } from 'react-router-dom';
+import { checkRoomBooking } from '../redux/actions/BookingActions';
 
 type TId = {
     id: IRoom['_id']
@@ -30,7 +31,7 @@ const RoomDetailsScreen = () => {
     const [hover, setHover] = useState<Number>(0);
     const [checkInDate, setCheckInDate] = useState<TBookingRoom['checkInDate']>();
     const [checkOutDate, setCheckOutDate] = useState<TBookingRoom['checkOutDate']>();
-    const [daysOfStay, setDaysOfStay] = useState<TBookingRoom['daysOfStay']>();
+    const [daysOfStay, setDaysOfStay] = useState<TBookingRoom['daysOfStay']>(0);
     const { id } = useParams<TId>();
 
     const { loggedIn } = useAuthStatus();
@@ -42,14 +43,30 @@ const RoomDetailsScreen = () => {
     const { loading: loadingCreateReview, success: successCreateReview, error: errorCreateReview } = 
     useSelector((state: RootStateOrAny) => state.roomCreateReview);
 
+    const { loading: loadingRoomIsAvailable, success: successRoomIsAvailable, error: errorRoomIsAvailable }
+    = useSelector((state: RootStateOrAny) => state.roomBookingCheck);
+
     useEffect(() => {
         dispatch(getRoomDetails(id as string));
-    }, [dispatch, id, successCreateReview]);
+    }, [dispatch, id]);
 
     const onChange = (dates: any) => {
         const [checkInDate, checkOutDate] = dates;
         setCheckInDate(checkInDate);
         setCheckOutDate(checkOutDate);
+
+        if (checkInDate && checkOutDate) {
+
+            // Calclate days of stay
+
+            const days = Math.abs(checkInDate - checkOutDate) / (1000 * 60 * 60 * 24);
+
+            setDaysOfStay(days);
+
+            dispatch(checkRoomBooking(id as string, checkInDate.toISOString(), checkOutDate.toISOString()));
+
+        }
+
     }
     
 
@@ -204,7 +221,10 @@ const RoomDetailsScreen = () => {
                                         minDate={new Date()}
                                         selectsRange
                                         inline
-                                    />                                
+                                    />
+                                    {loadingRoomIsAvailable && <Loader />}
+                                    {successRoomIsAvailable && <Message variant="success">Room Is Available And Days Of Stay is {daysOfStay}</Message>}                               
+                                    {errorRoomIsAvailable && <Message variant="danger">{errorRoomIsAvailable}</Message>}
                                 </Card.Body>
                             </Card>
                         </Col>
