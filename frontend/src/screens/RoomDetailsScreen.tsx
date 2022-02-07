@@ -16,6 +16,7 @@ import RoomFeatures from '../components/RoomFeatures';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { Link } from 'react-router-dom';
 import { CHECK_ROOM_BOOKING_RESET } from '../redux/constants/BookingConstants';
+import axios from 'axios';
 
 type TId = {
     id: IRoom['_id']
@@ -27,6 +28,12 @@ type TBookingRoom = {
     daysOfStay: Number
 }
 
+declare global {
+    interface Window {
+        paypal:any;
+    }
+}
+
 const RoomDetailsScreen = () => {
 
     const { loggedIn } = useAuthStatus();
@@ -34,6 +41,9 @@ const RoomDetailsScreen = () => {
     const [checkInDate, setCheckInDate] = useState<TBookingRoom['checkInDate']>();
     const [checkOutDate, setCheckOutDate] = useState<TBookingRoom['checkOutDate']>();
     const [daysOfStay, setDaysOfStay] = useState<TBookingRoom['daysOfStay']>(0);
+
+    const [sdkReady, setSdkReady] = useState<Boolean>(false);
+
     const { id } = useParams<TId>();
 
     const dispatch = useDispatch();
@@ -46,9 +56,26 @@ const RoomDetailsScreen = () => {
     const { loading: loadingRoomIsAvailable, success: successRoomIsAvailable, error: errorRoomIsAvailable }
     = useSelector((state: RootStateOrAny) => state.roomBookingCheck);
 
-
-
     useEffect(() => {
+
+        const addPaypalScript = async () => {
+            const { data: clientId } = await axios.get("/api/config/paypal");
+            const script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+            script.async = true;
+            script.onload = () => {
+                setSdkReady(true);
+            };
+            document.body.appendChild(script);
+        };
+
+        if (!window.paypal) {
+            addPaypalScript();
+        } else {
+            setSdkReady(true);
+        }
+
         dispatch(getRoomDetails(id as string));
         dispatch({ type: CHECK_ROOM_BOOKING_RESET });
     }, [dispatch, id]);
