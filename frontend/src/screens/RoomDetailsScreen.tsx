@@ -6,13 +6,16 @@ import { useSelector, useDispatch, RootStateOrAny } from 'react-redux';
 import { getRoomDetails } from '../redux/actions/RoomActions';
 import { IRoom } from '../interfaces/IRoom';
 import Loader from '../components/Loader';
-import { Container, Row, Col, Carousel, ListGroup, Card } from 'react-bootstrap';
+import { Container, Row, Col, Carousel, Button, Card } from 'react-bootstrap';
 import FormReview from '../components/FormReview';
 import Message from '../components/Message';
 import Rating from '../components/Rating';
 import { checkRoomBooking } from '../redux/actions/BookingActions';
 import ListReviews from '../components/ListReviews';
 import RoomFeatures from '../components/RoomFeatures';
+import { useAuthStatus } from '../hooks/useAuthStatus';
+import { Link } from 'react-router-dom';
+import { CHECK_ROOM_BOOKING_RESET } from '../redux/constants/BookingConstants';
 
 type TId = {
     id: IRoom['_id']
@@ -25,6 +28,8 @@ type TBookingRoom = {
 }
 
 const RoomDetailsScreen = () => {
+
+    const { loggedIn } = useAuthStatus();
 
     const [checkInDate, setCheckInDate] = useState<TBookingRoom['checkInDate']>();
     const [checkOutDate, setCheckOutDate] = useState<TBookingRoom['checkOutDate']>();
@@ -41,8 +46,11 @@ const RoomDetailsScreen = () => {
     const { loading: loadingRoomIsAvailable, success: successRoomIsAvailable, error: errorRoomIsAvailable }
     = useSelector((state: RootStateOrAny) => state.roomBookingCheck);
 
+
+
     useEffect(() => {
         dispatch(getRoomDetails(id as string));
+        dispatch({ type: CHECK_ROOM_BOOKING_RESET });
     }, [dispatch, id]);
 
     const onChange = (dates: any) => {
@@ -63,7 +71,24 @@ const RoomDetailsScreen = () => {
         }
 
     }
+
     
+    const handlePayment = () => {
+
+        const amount = Number(room.pricePerNight) * Number(daysOfStay);
+
+        const bookingData = {
+            roomId: id,
+            checkInDate: checkInDate?.toISOString(), 
+            checkOutDate: checkInDate?.toISOString(), 
+            amount, 
+            daysOfStay
+        }
+
+        console.log(bookingData);
+
+    }
+
   return (
       <Container className="pb-4">
         <Row>
@@ -125,8 +150,21 @@ const RoomDetailsScreen = () => {
                                         inline
                                     />
                                     {loadingRoomIsAvailable && <Loader />}
-                                    {successRoomIsAvailable && <Message variant="success">Room Is Available And Days Of Stay is {daysOfStay}</Message>}                               
+                                    {successRoomIsAvailable && <Message variant="success">Room Is Available</Message>}                               
                                     {errorRoomIsAvailable && <Message variant="danger">{errorRoomIsAvailable}</Message>}
+
+                                    {loggedIn && successRoomIsAvailable && ( 
+                                        <Button size="lg" variant="primary" onClick={handlePayment}>
+                                            Pay ${Number(room.pricePerNight) * Number(daysOfStay)}
+                                        </Button>
+                                     )}
+
+                                     {!loggedIn && !successRoomIsAvailable && (
+                                        <Message variant="info">
+                                            Please <Link to="/login">Sign In</Link> for booking
+                                        </Message>
+                                     )}
+                                
                                 </Card.Body>
                             </Card>
                         </Col>

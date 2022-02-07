@@ -18,6 +18,8 @@ export const roomBookingCheckReducer = (state = {}, action: AnyAction) => {
                 loading: false,
                 error: action.payload
             };
+        case actions.CHECK_ROOM_BOOKING_RESET:
+            return {}
         default:
             return state;
     }

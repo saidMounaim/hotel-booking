@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 type TPaymentInfo = {
     id: string,
     status: string,
+    update_time: Date,
+    email_address: string,
 }
 
 export interface IBooking {
@@ -53,14 +55,10 @@ const BookingSchema = new mongoose.Schema({
     },
 
     paymentInfo: {
-        id: {
-            type: String,
-            required: true,
-        },
-        status: {
-            type: String,
-            required: true,
-        }
+      id: { type: String },
+      status: { type: String },
+      update_time: { type: Date },
+      email_address: { type: String },
     },
 
     paidAt: {

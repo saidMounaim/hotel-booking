@@ -40,6 +40,10 @@ app.use("/api/bookings", bookingRoutes);
 // Upload Route
 app.use("/api/uploads", uploadRoutes);
 
+app.get("/api/config/paypal", (req, res) => {
+  res.status(201).send(process.env.PAYPAL_CLIENT_ID);
+});
+
 app.use(errorHandler);
 app.use(notFound);
 

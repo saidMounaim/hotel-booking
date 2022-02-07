@@ -14,7 +14,7 @@ const rootReducers = combineReducers({
   roomsFetch: roomsFetchReducer,
   roomDetails: roomDetailsReducer,
   roomCreateReview: roomCreateReviewReducer,
-  roomBookingCheck: roomBookingCheckReducer
+  roomBookingCheck: roomBookingCheckReducer,
 });
 
 const userInfoFromStorage = JSON.parse(localStorage.getItem("userInfo")!);
