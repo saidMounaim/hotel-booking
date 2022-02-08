@@ -77,7 +77,7 @@ const RoomDetailsScreen = () => {
             document.body.appendChild(script);
         };
 
-        if (!window.paypal) {
+        if (!window.paypal && !successBookingCreate) {
             addPaypalScript();
         } else {
             setSdkReady(true);
@@ -156,7 +156,7 @@ const RoomDetailsScreen = () => {
                         </Carousel>
                     </div>
                     <Row>
-                        <Col xs={12} sm={12} md={7}>
+                        <Col xs={12} sm={12} md={8}>
                             <h3>Description</h3>
                             <p>
                                 {room.description}
@@ -177,7 +177,7 @@ const RoomDetailsScreen = () => {
                             <ListReviews roomReviews={room.reviews} />
 
                         </Col>
-                        <Col xs={12} sm={12} md={5}>
+                        <Col xs={12} sm={12} md={4}>
                             <Card className="shadow p-3 mb-5 bg-body rounded">
                                 <Card.Body>
                                     <Card.Title>${room.pricePerNight} / Per Night</Card.Title>

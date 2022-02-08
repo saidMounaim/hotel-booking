@@ -10,7 +10,7 @@ const ListReviews: React.FC<TListReviews> = ({ roomReviews }) => {
   return (
     <ListGroup variant="flush">
         {roomReviews?.map((r: any) =>
-            <ListGroup.Item>
+            <ListGroup.Item key={r._id}>
                 <h4>{r.name}</h4>
                 <Rating reviews={r.rating} />
                 <p>
