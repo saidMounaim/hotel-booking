@@ -53,3 +53,19 @@ export const checkRoomIsAvailble = asyncHandler(async (req: Request, res: Respon
     res.status(201).json({ roomAvailable });
 
 })
+
+// @Desc Get all bookings current user
+// @Route /api/bookings/me
+// @Method GET
+export const myBookings = asyncHandler(async (req: IUserRequest, res: Response) => {
+
+    const bookings = await Booking.find({ user: req.user._id }).populate("user", "name email").populate("room", "name, images");
+
+    if(!bookings) {
+        res.status(401);
+        throw new Error("Bookings not found");
+    }
+
+    res.status(201).json(bookings);
+
+})
