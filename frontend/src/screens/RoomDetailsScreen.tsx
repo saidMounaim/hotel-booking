@@ -15,8 +15,12 @@ import ListReviews from '../components/ListReviews';
 import RoomFeatures from '../components/RoomFeatures';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { Link } from 'react-router-dom';
-import { CHECK_ROOM_BOOKING_RESET } from '../redux/constants/BookingConstants';
+import { CHECK_ROOM_BOOKING_RESET, CREATE_BOOKING_RESET } from '../redux/constants/BookingConstants';
 import axios from 'axios';
+import { PayPalButton } from "react-paypal-button-v2";
+import { createBooking } from '../redux/actions/BookingActions';
+
+
 
 type TId = {
     id: IRoom['_id']
@@ -56,6 +60,9 @@ const RoomDetailsScreen = () => {
     const { loading: loadingRoomIsAvailable, success: successRoomIsAvailable, error: errorRoomIsAvailable }
     = useSelector((state: RootStateOrAny) => state.roomBookingCheck);
 
+    const { loading: loadingBookingCreate, success: successBookingCreate, error: errorBookingCreate } 
+    = useSelector((state: RootStateOrAny) => state.bookingCreate);
+
     useEffect(() => {
 
         const addPaypalScript = async () => {
@@ -78,6 +85,7 @@ const RoomDetailsScreen = () => {
 
         dispatch(getRoomDetails(id as string));
         dispatch({ type: CHECK_ROOM_BOOKING_RESET });
+        dispatch({ type: CREATE_BOOKING_RESET });
     }, [dispatch, id]);
 
     const onChange = (dates: any) => {
@@ -100,19 +108,29 @@ const RoomDetailsScreen = () => {
     }
 
     
-    const handlePayment = () => {
+    const successPaymentHandler = (paymentResult: any) => {
+            
+        const amountPaid = Number(room.pricePerNight) * Number(daysOfStay);
 
-        const amount = Number(room.pricePerNight) * Number(daysOfStay);
-
-        const bookingData = {
-            roomId: id,
-            checkInDate: checkInDate?.toISOString(), 
-            checkOutDate: checkInDate?.toISOString(), 
-            amount, 
-            daysOfStay
+        const paymentInfo = {
+            id: paymentResult.id,
+            status: paymentResult.status,
+            update_time: paymentResult.update_time,
+            email_address: paymentResult.payer.email_address,
         }
 
-        console.log(bookingData);
+        const bookingData = {
+            room: id,
+            checkInDate: checkInDate?.toISOString(), 
+            checkOutDate: checkInDate?.toISOString(), 
+            amountPaid, 
+            paymentInfo,
+            daysOfStay,
+        }
+
+        dispatch(createBooking(bookingData));
+        dispatch({ type: CHECK_ROOM_BOOKING_RESET });
+        dispatch({ type: CREATE_BOOKING_RESET });
 
     }
 
@@ -181,9 +199,18 @@ const RoomDetailsScreen = () => {
                                     {errorRoomIsAvailable && <Message variant="danger">{errorRoomIsAvailable}</Message>}
 
                                     {loggedIn && successRoomIsAvailable && ( 
-                                        <Button size="lg" variant="primary" onClick={handlePayment}>
+                                        <Button size="lg" variant="primary" className="mb-3">
                                             Pay ${Number(room.pricePerNight) * Number(daysOfStay)}
                                         </Button>
+                                     )}
+
+                                     {!sdkReady && <Loader />}
+
+                                     {loggedIn && successRoomIsAvailable && sdkReady && !successBookingCreate && (
+                                        <PayPalButton
+                                            amount={Number(room.pricePerNight) * Number(daysOfStay)}
+                                            onSuccess={successPaymentHandler}
+                                        />
                                      )}
 
                                      {!loggedIn && !successRoomIsAvailable && (
@@ -192,6 +219,18 @@ const RoomDetailsScreen = () => {
                                         </Message>
                                      )}
                                 
+                                     {successBookingCreate && (
+                                        <Message variant="success">
+                                            Your booking has been paymented
+                                        </Message>
+                                     )}
+
+                                     {errorBookingCreate && (
+                                        <Message variant="success">
+                                            {errorBookingCreate}
+                                        </Message>
+                                     )}
+
                                 </Card.Body>
                             </Card>
                         </Col>
