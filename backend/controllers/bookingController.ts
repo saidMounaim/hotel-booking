@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import Booking from '../models/Booking';
+import Booking, { IBooking } from '../models/Booking';
 import { IUserRequest } from '../models/User';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+
+const moment = extendMoment(Moment as any);
 
 // @Desc new booking
 // @Route /api/bookings
@@ -67,5 +71,31 @@ export const myBookings = asyncHandler(async (req: IUserRequest, res: Response) 
     }
 
     res.status(201).json(bookings);
+
+})
+
+// @Desc Get booked dates
+// Route /api/bookings/dates/:roomId
+// @Route GET
+export const getBookedDates = asyncHandler(async (req: Request, res: Response) => {
+
+    const bookings = await Booking.find({ room: req.params.roomId });
+
+    let bookedDates: {}[] = [];
+
+    const timeDiffernece = moment().utcOffset() / 60;
+
+    bookings.forEach((booking: IBooking) => {
+
+        const checkInDate = moment(booking.checkInDate).add(timeDiffernece, 'hours')
+        const checkOutDate = moment(booking.checkOutDate).add(timeDiffernece, 'hours')
+
+        const range = moment.range(moment(checkInDate), moment(checkOutDate));
+
+        const dates = Array.from(range.by('day'));
+        bookedDates = bookedDates.concat(dates);
+    })
+
+    res.status(200).json(bookedDates);
 
 })

@@ -122,7 +122,7 @@ const RoomDetailsScreen = () => {
         const bookingData = {
             room: id,
             checkInDate: checkInDate?.toISOString(), 
-            checkOutDate: checkInDate?.toISOString(), 
+            checkOutDate: checkOutDate?.toISOString(), 
             amountPaid, 
             paymentInfo,
             daysOfStay,
