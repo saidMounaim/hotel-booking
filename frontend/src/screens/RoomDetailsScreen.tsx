@@ -19,7 +19,7 @@ import { CHECK_ROOM_BOOKING_RESET, CREATE_BOOKING_RESET } from '../redux/constan
 import axios from 'axios';
 import { PayPalButton } from "react-paypal-button-v2";
 import { createBooking } from '../redux/actions/BookingActions';
-
+import { getBookedDates } from '../redux/actions/BookingActions';
 
 
 type TId = {
@@ -63,7 +63,11 @@ const RoomDetailsScreen = () => {
     const { loading: loadingBookingCreate, success: successBookingCreate, error: errorBookingCreate } 
     = useSelector((state: RootStateOrAny) => state.bookingCreate);
 
+    const {bookedDates} = useSelector((state: RootStateOrAny) => state.bookedDates);
+
     useEffect(() => {
+
+        console.log(bookedDates);
 
         const addPaypalScript = async () => {
             const { data: clientId } = await axios.get("/api/config/paypal");
@@ -84,6 +88,7 @@ const RoomDetailsScreen = () => {
         }
 
         dispatch(getRoomDetails(id as string));
+        dispatch(getBookedDates(id as string));
         dispatch({ type: CHECK_ROOM_BOOKING_RESET });
         dispatch({ type: CREATE_BOOKING_RESET });
     }, [dispatch, id]);
@@ -107,7 +112,11 @@ const RoomDetailsScreen = () => {
 
     }
 
-    
+    const excludedDates: any[] = []
+    bookedDates?.forEach((date: Date) => {
+        excludedDates.push(new Date(date))
+    })
+
     const successPaymentHandler = (paymentResult: any) => {
             
         const amountPaid = Number(room.pricePerNight) * Number(daysOfStay);
@@ -129,6 +138,7 @@ const RoomDetailsScreen = () => {
         }
 
         dispatch(createBooking(bookingData));
+        dispatch(getBookedDates(id as string));
         dispatch({ type: CHECK_ROOM_BOOKING_RESET });
         dispatch({ type: CREATE_BOOKING_RESET });
 
@@ -191,6 +201,7 @@ const RoomDetailsScreen = () => {
                                         startDate={checkInDate}
                                         endDate={checkOutDate}
                                         minDate={new Date()}
+                                        excludeDates={excludedDates}
                                         selectsRange
                                         inline
                                     />

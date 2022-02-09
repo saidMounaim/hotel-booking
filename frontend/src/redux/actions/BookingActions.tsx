@@ -43,14 +43,29 @@ export const createBooking = (bookingData: {}) => async (dispatch: Dispatch, get
 
         await axios.post(`/api/bookings`, bookingData, config);
 
-        console.log("SUCCESS");
-
         dispatch({ type: actions.CREATE_BOOKING_SUCCESS });
 
     } catch (error: any) {
-        console.log(error.response.data.message);
         dispatch({ 
             type: actions.CREATE_BOOKING_FAIL, 
+            payload: error.response && error.response.data.message ? 
+            error.response.data.message : error.message });
+    }
+
+}
+
+export const getBookedDates = (roomId:  IRoom['_id']) => async (dispatch: Dispatch) => {
+
+    try {
+        dispatch({ type: actions.GET_BOOKED_DATES_REQUEST });
+
+        const { data } = await axios.get(`/api/bookings/dates/${roomId}`);
+
+        dispatch({ type: actions.GET_BOOKED_DATES_SUCCESS, payload: data });
+
+    } catch (error: any) {
+        dispatch({ 
+            type: actions.GET_BOOKED_DATES_FAIL, 
             payload: error.response && error.response.data.message ? 
             error.response.data.message : error.message });
     }
