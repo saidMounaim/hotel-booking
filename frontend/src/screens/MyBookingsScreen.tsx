@@ -1,7 +1,30 @@
 import React, { useEffect } from 'react';
 import { Container, Row, Col, Table } from 'react-bootstrap';
+import { useSelector, useDispatch, RootStateOrAny } from 'react-redux';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
+import { getMyBookings } from '../redux/actions/BookingActions';
+import moment from 'moment';
+
+
+type TMyBooking = {
+  _id: string,
+  checkInDate: Date,
+  checkOutDate: Date,
+  amountPaid: number
+}
+
 
 const MyBookingsScreen = () => {
+
+  const dispatch = useDispatch();
+
+  const { myBookings, loading, error } = useSelector((state: RootStateOrAny) => state.BookingsMy);
+
+  useEffect(() => {
+    dispatch(getMyBookings());
+  }, [dispatch]);
+  
 
   return (
     <Container>
@@ -12,6 +35,7 @@ const MyBookingsScreen = () => {
       </Row>
       <Row>
         <Col>
+        {loading ? <Loader /> : error ? <Message variant="danger">{error}</Message> : (
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
@@ -22,10 +46,17 @@ const MyBookingsScreen = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-              </tr>
+              {myBookings?.map((book: TMyBooking) =>
+                <tr key={book._id}>
+                  <td>{book._id}</td>
+                  <td>{moment(book.checkInDate as Date).format("LL")}</td>
+                  <td>{moment(book.checkOutDate as Date).format("LL")}</td>
+                  <td>${book.amountPaid}</td>
+                </tr>
+              )}
             </tbody>
           </Table>
+          )}
         </Col>
       </Row>
     </Container>
