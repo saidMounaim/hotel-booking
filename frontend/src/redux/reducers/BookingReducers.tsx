@@ -73,3 +73,26 @@ export const bookedDatesReducer = (state = {}, action: AnyAction) => {
     }
 
 }
+
+export const BookingsMyReducer = (state = {}, action: AnyAction) => {
+
+    switch (action.type) {
+        case actions.GET_MY_BOOKINGS_REQUEST:
+            return {
+                loading: true,
+            };
+        case actions.GET_MY_BOOKINGS_SUCCESS:
+            return {
+                loading: false,
+                myBookings: action.payload
+            };
+        case actions.GET_MY_BOOKINGS_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            };
+        default:
+            return state;
+    }
+
+}

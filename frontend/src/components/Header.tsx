@@ -38,6 +38,9 @@ const Header: React.FC = () => {
                 {userInfo.name}
               </div>
             } id="basic-nav-dropdown">
+               <LinkContainer to="/bookings/me">
+                <NavDropdown.Item>My Bookings</NavDropdown.Item>
+              </LinkContainer>
               <LinkContainer to="/account/profile">
                 <NavDropdown.Item>Profile</NavDropdown.Item>
               </LinkContainer>

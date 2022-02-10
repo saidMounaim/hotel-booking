@@ -71,3 +71,30 @@ export const getBookedDates = (roomId:  IRoom['_id']) => async (dispatch: Dispat
     }
 
 }
+
+export const getMyBookings = () => async (dispatch: Dispatch, getState: any) => {
+
+    try {
+        dispatch({ type: actions.GET_MY_BOOKINGS_REQUEST });
+
+        const { userLogin: { userInfo } } = getState();
+
+        const config = {
+            headers: {
+                "Content-Type": "application/JSON",
+                "Authorization": `Bearer ${userInfo.token}`
+            }
+        };
+
+        const { data } = await axios.get(`/api/bookings/me`, config);
+
+        dispatch({ type: actions.GET_MY_BOOKINGS_SUCCESS, payload: data });
+
+    } catch (error: any) {
+        dispatch({ 
+            type: actions.GET_MY_BOOKINGS_FAIL, 
+            payload: error.response && error.response.data.message ? 
+            error.response.data.message : error.message });
+    }
+
+}
