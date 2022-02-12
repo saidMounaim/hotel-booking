@@ -6,6 +6,7 @@ import { fetchRooms } from '../redux/actions/RoomActions';
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { IRoom } from '../interfaces/IRoom';
+import SearchRooms from "../components/SearchRooms";
 
 const HomeScreen = () => {
 
@@ -24,6 +25,7 @@ const HomeScreen = () => {
           <h2 className="mb-4">All Rooms</h2>
         </Col>
       </Row>
+      <SearchRooms />
       <Row>
         {loading ? <Loader /> : error ? <Message variant="danger">{error}</Message> : (
           <>
