@@ -15,7 +15,7 @@ export const roomsFetchReducer = (state = initialState, action: AnyAction) => {
         case actions.FETCH_ROOMS_SUCCESS:
             return {
                 loading: false,
-                rooms: action.payload
+                rooms: action.payload.rooms
             };
         case actions.FETCH_ROOMS_FAIL:
             return {

@@ -8,6 +8,9 @@ import { IUserRequest } from '../models/User';
 // @Method GET
 export const getAll = asyncHandler(async(req: Request, res: Response) => {
 
+    const pageSize = 4;
+    const page = Number(req.query.pageNumber) || 1;
+
     const keyword = req.query.keyword ? {
         $or: [
             {name: { $regex: req.query.keyword, $options: "i" }},
@@ -20,8 +23,15 @@ export const getAll = asyncHandler(async(req: Request, res: Response) => {
 
     const category = req.query.roomType ? {category: req.query.roomType} : {};
 
-    const rooms = await Room.find({ ...keyword, ...numOfBeds, ...category });
-    res.status(201).json(rooms);
+    const count = await Room.countDocuments({ ...keyword, ...numOfBeds, ...category })
+
+    const rooms = await Room.find({ ...keyword, ...numOfBeds, ...category }).limit(pageSize)
+    .skip(pageSize * (page - 1));
+    res.status(201).json({
+        rooms,
+        page,
+        pages: Math.ceil(count / pageSize),
+    });
 })
 
 // @Desc Search rooms
