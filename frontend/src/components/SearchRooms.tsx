@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Container, Form, FormGroup, Row } from 'react-bootstrap';
+import { Col, Form, FormGroup, Row } from 'react-bootstrap';
 
 const SearchRooms = () => {
   return (

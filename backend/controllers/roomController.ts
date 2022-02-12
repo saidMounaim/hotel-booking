@@ -7,8 +7,33 @@ import { IUserRequest } from '../models/User';
 // @Route /api/rooms
 // @Method GET
 export const getAll = asyncHandler(async(req: Request, res: Response) => {
-    const rooms = await Room.find({});
+
+    const keyword = req.query.keyword ? {
+        $or: [
+            {name: { $regex: req.query.keyword, $options: "i" }},
+            {description: { $regex: req.query.keyword, $options: "i" }},
+        ]
+    }
+    : {};
+
+    const numOfBeds = req.query.numOfBeds ? {numOfBeds: req.query.numOfBeds} : {};
+
+    const category = req.query.roomType ? {category: req.query.roomType} : {};
+
+    const rooms = await Room.find({ ...keyword, ...numOfBeds, ...category });
     res.status(201).json(rooms);
+})
+
+// @Desc Search rooms
+// @Route /api/rooms/search/
+// @Method GET
+export const searchRooms = asyncHandler(async(req: Request, res: Response) => {
+    const filterd = await Room.find({ $and: [ 
+        { $or: [{name: req.query.keyword },{description: req.query.keyword}] }, 
+        {numOfBeds: req.query.numOfBeds}, 
+        {category: req.query.roomType} 
+    ] });
+    res.status(201).json(filterd);
 })
 
 // @Desc Get Single Room
