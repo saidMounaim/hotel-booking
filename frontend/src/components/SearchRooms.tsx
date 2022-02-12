@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Form, FormGroup, Row } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { fetchRooms } from '../redux/actions/RoomActions';
 
-const SearchRooms = () => {
+const SearchRooms: React.FC = () => {
+
+    const dispatch = useDispatch();
+
+    const [keyword, setKeyword] = useState<string>("");
+    const [numOfBeds, setNumOfBeds] = useState<number | string>("");
+    const [roomType, setRoomType] = useState<string>("");
+
+    
+    useEffect(() => {
+        dispatch(fetchRooms(keyword, numOfBeds, roomType));
+    }, [dispatch, keyword, numOfBeds, roomType]);
+
   return (
     <Form className="mb-4">
         <Row>
@@ -10,14 +24,22 @@ const SearchRooms = () => {
                     <Form.Label>Search</Form.Label>
                     <Form.Control 
                         type="text"
+                        name="keyword"
                         placeholder="Search"
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
                     />
                 </FormGroup>
             </Col>
             <Col md={4}>
                 <FormGroup controlId="numOfBeds">
                     <Form.Label>Num of Beds</Form.Label>
-                    <Form.Select aria-label="Default select example">
+                    <Form.Select 
+                        name="numOfBeds" 
+                        value={numOfBeds} 
+                        onChange={(e) => setNumOfBeds(e.target.value)} 
+                        aria-label="Default select example"
+                    >
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -29,10 +51,15 @@ const SearchRooms = () => {
             <Col md={4}>
                 <FormGroup controlId="roomType">
                     <Form.Label>Room Type</Form.Label>
-                    <Form.Select aria-label="Default select example">
-                        <option value="king">King</option>
-                        <option value="single">Single</option>
-                        <option value="twins">Twins</option>
+                    <Form.Select 
+                        name="roomType"
+                        value={roomType} 
+                        onChange={(e) => setRoomType(e.target.value)} 
+                        aria-label="Default select example"
+                    >
+                        <option value="King">King</option>
+                        <option value="Single">Single</option>
+                        <option value="Twins">Twins</option>
                     </Form.Select>
                 </FormGroup>
             </Col>
