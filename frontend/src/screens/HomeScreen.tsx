@@ -25,7 +25,6 @@ const HomeScreen = () => {
     dispatch(fetchRooms(keyword, numOfBeds, roomType, currentPage));
   }, [dispatch, keyword, numOfBeds, roomType, currentPage]);
 
-  console.log(count);
   return (
     <Container>
       <Row>

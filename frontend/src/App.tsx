@@ -2,7 +2,9 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header';
+import OnlyAdmin from './components/OnlyAdmin';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoomsScreen from './screens/AdminRoomsScreen';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import MyBookingsScreen from './screens/MyBookingsScreen';
@@ -29,6 +31,9 @@ function App() {
               </Route>
               <Route path="/bookings/me" element={<ProtectedRoute />} >
                 <Route path="/bookings/me" element={<MyBookingsScreen />} />
+              </Route>
+              <Route path="/admin/rooms" element={<OnlyAdmin />} >
+                <Route path="/admin/rooms" element={<AdminRoomsScreen />} />
               </Route>
               <Route path="/room/:id" element={<RoomDetailsScreen />} />
           </Routes>
