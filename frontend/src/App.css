@@ -14,7 +14,7 @@
 .dropdown-avatar .dropdown-toggle::after {
   position: absolute;
   right: -11px;
-  top: 28px;
+  top: 50%;
 }
 
 .card-room {

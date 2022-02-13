@@ -30,15 +30,15 @@ const Header: React.FC = () => {
               <Nav.Link>Home</Nav.Link>
             </LinkContainer>
           </Nav>
-          <Nav className="ml-auto">
+          <Nav className="ml-auto align-items-center">
             {userInfo ? 
             <NavDropdown className="dropdown-avatar" title={
               <div className="d-flex align-items-center">
-                <Image className="avatar" src={userInfo.avatar} alt="Avatar" />
+                <Image className="avatar" src={userInfo.avatar ? userInfo.avatar : `/uploads/user-default.jpg`} alt="Avatar" />
                 {userInfo.name}
               </div>
             } id="basic-nav-dropdown">
-               <LinkContainer to="/bookings/me">
+              <LinkContainer to="/bookings/me">
                 <NavDropdown.Item>My Bookings</NavDropdown.Item>
               </LinkContainer>
               <LinkContainer to="/account/profile">
@@ -60,6 +60,19 @@ const Header: React.FC = () => {
               </LinkContainer>
             </>
             }
+            {userInfo && userInfo.isAdmin && (
+              <NavDropdown className="ms-4 dropdown-avatar" title="Admin" id="basic-nav-dropdown">
+                <LinkContainer to="/admin/rooms">
+                  <NavDropdown.Item>Rooms</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to="/admin/bookings">
+                  <NavDropdown.Item>Bookings</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to="/admin/users">
+                  <NavDropdown.Item>Users</NavDropdown.Item>
+                </LinkContainer>
+              </NavDropdown>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
