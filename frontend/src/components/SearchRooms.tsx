@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Col, Form, FormGroup, Row } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import { fetchRooms } from '../redux/actions/RoomActions';
 
-const SearchRooms: React.FC = () => {
+type SearchRoomsParams = {
+    keyword: string,
+    setKeyword: React.Dispatch<React.SetStateAction<string>>,
+    numOfBeds: number | string,
+    setNumOfBeds: React.Dispatch<React.SetStateAction<number | string>>,
+    roomType: string,
+    setRoomType: React.Dispatch<React.SetStateAction<string>>
+}
 
-    const dispatch = useDispatch();
-
-    const [keyword, setKeyword] = useState<string>("");
-    const [numOfBeds, setNumOfBeds] = useState<number | string>("");
-    const [roomType, setRoomType] = useState<string>("");
-
-    
-    useEffect(() => {
-        dispatch(fetchRooms(keyword, numOfBeds, roomType));
-    }, [dispatch, keyword, numOfBeds, roomType]);
+const SearchRooms: React.FC<SearchRoomsParams> = 
+({ keyword, setKeyword, numOfBeds, setNumOfBeds, roomType, setRoomType }) => {
 
   return (
     <Form className="mb-4">

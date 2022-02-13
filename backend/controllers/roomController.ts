@@ -31,6 +31,7 @@ export const getAll = asyncHandler(async(req: Request, res: Response) => {
         rooms,
         page,
         pages: Math.ceil(count / pageSize),
+        count
     });
 })
 

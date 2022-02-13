@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from 'react-bootstrap';
 import RoomCard from "../components/RoomCard";
-import { useSelector, RootStateOrAny } from 'react-redux';
+import { useSelector, useDispatch, RootStateOrAny } from 'react-redux';
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { IRoom } from '../interfaces/IRoom';
 import SearchRooms from "../components/SearchRooms";
+import { fetchRooms } from '../redux/actions/RoomActions';
+import Paginate from "../components/Paginate";
+
 
 const HomeScreen = () => {
 
-  const { loading, rooms, error } = useSelector((state: RootStateOrAny) => state.roomsFetch);
-  
+  const dispatch = useDispatch();
+
+  const [keyword, setKeyword] = useState<string>("");
+  const [numOfBeds, setNumOfBeds] = useState<number | string>("");
+  const [roomType, setRoomType] = useState<string>("");
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const { loading, rooms, count, error } = useSelector((state: RootStateOrAny) => state.roomsFetch);
+
+  useEffect(() => {
+    dispatch(fetchRooms(keyword, numOfBeds, roomType, currentPage));
+  }, [dispatch, keyword, numOfBeds, roomType, currentPage]);
+
+  console.log(count);
   return (
     <Container>
       <Row>
@@ -18,7 +33,14 @@ const HomeScreen = () => {
           <h2 className="mb-4">All Rooms</h2>
         </Col>
       </Row>
-      <SearchRooms />
+      <SearchRooms 
+        keyword={keyword} 
+        setKeyword={setKeyword}
+        numOfBeds={numOfBeds}
+        setNumOfBeds={setNumOfBeds}
+        roomType={roomType}
+        setRoomType={setRoomType}
+      />
       <Row>
         {loading ? <Loader /> : error ? <Message variant="danger">{error}</Message> : rooms.length > 0 ?
           <>
@@ -33,6 +55,18 @@ const HomeScreen = () => {
             <Message variant="info">No Room Available</Message>
           </>
         )}
+      </Row>
+      <Row>
+        <Col md={12}>
+          {count !== 0 && (
+            <Paginate
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPosts={count}
+              postPerPage={4}
+            />
+          )}
+        </Col>
       </Row>
     </Container>
   );

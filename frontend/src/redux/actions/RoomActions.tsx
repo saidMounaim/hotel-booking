@@ -3,13 +3,13 @@ import { Dispatch } from 'redux';
 import * as actions from '../constants/RoomConstants';
 import { IRoom } from '../../interfaces/IRoom';
 
-export const fetchRooms = (keyword: string, numOfBeds: number | string, roomType: string) => 
+export const fetchRooms = (keyword: string, numOfBeds: number | string, roomType: string, currentPage: number) => 
 async (dispatch: Dispatch) => {
     try {
         dispatch({ type: actions.FETCH_ROOMS_REQUEST });
 
         const { data } = 
-        await axios.get(`/api/rooms/?keyword=${keyword}&numOfBeds=${numOfBeds}&roomType=${roomType}`);
+        await axios.get(`/api/rooms/?keyword=${keyword}&numOfBeds=${numOfBeds}&roomType=${roomType}&pageNumber=${currentPage}`);
 
         dispatch({ type: actions.FETCH_ROOMS_SUCCESS, payload: data });
         
