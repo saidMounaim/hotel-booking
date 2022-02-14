@@ -63,3 +63,29 @@ export const createRoomReview = (id: IRoom['_id'], review: {}) => async (dispatc
     }
 
 }
+
+export const createRoom = (roomData: IRoom) => async (dispatch: Dispatch, getState: any) => {
+
+    try {
+        dispatch({ type: actions.CREATE_ROOM_REQUEST });
+
+        const { userLogin: { userInfo } } = getState();
+
+        const config = {
+            headers: {
+                "Content-Type": "application/JSON",
+                "Authorization": `Bearer ${userInfo.token}`
+            }
+        }
+
+        await axios.post(`/api/rooms`, roomData, config);
+        dispatch({ type: actions.CREATE_ROOM_SUCCESS });
+
+    } catch (error: any) {
+        dispatch({ 
+            type: actions.CREATE_ROOM_FAIL, 
+            payload: error.response && error.response.data.message ? 
+            error.response.data.message : error.message });
+    }
+
+}
