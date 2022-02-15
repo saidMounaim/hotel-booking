@@ -56,7 +56,7 @@ const RegisterScreen: React.FC = () => {
 
             const { data } = await axios.post("/api/uploads", formData, config);
 
-            setAvatar(data);
+            setAvatar(data[0].path);
 
         } catch (error: any) {
             console.log(error.message);
