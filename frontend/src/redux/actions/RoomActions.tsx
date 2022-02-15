@@ -64,7 +64,9 @@ export const createRoomReview = (id: IRoom['_id'], review: {}) => async (dispatc
 
 }
 
-export const createRoom = (roomData: IRoom) => async (dispatch: Dispatch, getState: any) => {
+type TRoomCreate = Pick<IRoom, "name" | "description" | "address" | "guestCapacity" | "numOfBeds" | "category" | "internet" | "airConditioned" | "breakfast" | "petsAllowed" | "roomCleaning" | "pricePerNight" | "images">
+
+export const createRoom = (roomData: TRoomCreate) => async (dispatch: Dispatch, getState: any) => {
 
     try {
         dispatch({ type: actions.CREATE_ROOM_REQUEST });

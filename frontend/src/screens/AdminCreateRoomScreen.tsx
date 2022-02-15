@@ -1,42 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {  Container, Form, Row, Col, FormGroup, FloatingLabel, Button } from 'react-bootstrap';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-
-type TRoomData = {
-    name: string,
-    description: string,
-    address: string,
-    guestCapacity: number,
-    numOfBeds: number,
-    roomType: string,
-    internet: boolean,
-    airConditioned: boolean,
-    breakfast: boolean,
-    petsAllowed: boolean,
-    roomCleaning: boolean,
-    price: number,
-    imagesRoom: {}[]
-}
+import { Navigate, useNavigate } from 'react-router-dom';
+import { createRoom } from '../redux/actions/RoomActions';
+import { IRoom } from '../interfaces/IRoom';
+import Message from '../components/Message';
 
 const AdminCreateRoomScreen = () => {
 
-    const [name, setName] = useState<TRoomData['name']>("");
-    const [description, setDescription] = useState<TRoomData['description']>("");
-    const [address, setAddress] = useState<TRoomData['address']>("");
-    const [guestCapacity, setGuestCapacity] = useState<TRoomData['guestCapacity']>(0);
-    const [numOfBeds, setNumOfBeds] = useState<TRoomData['numOfBeds']>(0);
-    const [roomType, setRoomType] = useState<TRoomData['roomType']>("King");
-    const [internet, setInternet] = useState<TRoomData['internet']>(false);
-    const [airConditioned, setAirConditioned] = useState<TRoomData['airConditioned']>(false);
-    const [breakfast, setBreakfast] = useState<TRoomData['breakfast']>(false);
-    const [petsAllowed, setPetsAllowed] = useState<TRoomData['petsAllowed']>(false);
-    const [roomCleaning, setRoomCleaning] = useState<TRoomData['roomCleaning']>(false);
-    const [price, setPrice] = useState<TRoomData['price']>(0);
-    const [imagesRoom, setImagesRoom] = useState<TRoomData['imagesRoom']>([{}]);
+    let navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const [name, setName] = useState<IRoom['name']>("");
+    const [description, setDescription] = useState<IRoom['description']>("");
+    const [address, setAddress] = useState<IRoom['address']>("");
+    const [guestCapacity, setGuestCapacity] = useState<IRoom['guestCapacity']>(0);
+    const [numOfBeds, setNumOfBeds] = useState<IRoom['numOfBeds']>(0);
+    const [roomType, setRoomType] = useState<IRoom['category'] | string>("King");
+    const [internet, setInternet] = useState<IRoom['internet']>(false);
+    const [airConditioned, setAirConditioned] = useState<IRoom['airConditioned']>(false);
+    const [breakfast, setBreakfast] = useState<IRoom['breakfast']>(false);
+    const [petsAllowed, setPetsAllowed] = useState<IRoom['petsAllowed']>(false);
+    const [roomCleaning, setRoomCleaning] = useState<IRoom['roomCleaning']>(false);
+    const [price, setPrice] = useState<IRoom['pricePerNight']>(0);
+    const [imagesRoom, setImagesRoom] = useState<IRoom['images']>([{image: ""}]);
+
+    const { success, error } = useSelector((state: RootStateOrAny) => state.roomCreate);
 
     const handlerSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        dispatch(createRoom({ name, description, address, guestCapacity, numOfBeds, category: roomType, internet, airConditioned, breakfast, petsAllowed, roomCleaning, pricePerNight: price, images: imagesRoom }));
+
     }
+
+    useEffect(() => {
+      if(success) {
+        navigate("/");
+      }
+    }, [dispatch, success]);
+
 
     const uploadImagesHandler = async (e: React.FormEvent) => {
         
@@ -66,7 +70,7 @@ const AdminCreateRoomScreen = () => {
 
             const allImages = [];
             for(let i = 0; i < data.length; i++) {
-                allImages.push({ image: data[i].path });
+                allImages.push({ image: `/${data[i].path}` });
             }
 
             setImagesRoom(allImages);
@@ -86,6 +90,11 @@ const AdminCreateRoomScreen = () => {
         </Row>
         <Row>
             <Col md={12}>
+                {error && (
+                    <Message variant='danger'>
+                        {error}
+                    </Message>
+                )}
                 <Form onSubmit={handlerSubmit}>
                     <FormGroup controlId="name">
                         <Form.Label>
@@ -97,6 +106,7 @@ const AdminCreateRoomScreen = () => {
                             name="name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            required
                         />
                     </FormGroup>
                     <FormGroup className="mt-3 mb-3">
@@ -108,6 +118,7 @@ const AdminCreateRoomScreen = () => {
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 style={{ height: '100px' }}
+                                required
                             />
                         </FloatingLabel>
                     </FormGroup>
@@ -121,6 +132,7 @@ const AdminCreateRoomScreen = () => {
                             name="address"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
+                            required
                         />
                     </FormGroup>
                     <Row className="mt-3 mb-3">
@@ -131,7 +143,7 @@ const AdminCreateRoomScreen = () => {
                                 </Form.Label>
                                 <Form.Select 
                                     name="guestCapacity" 
-                                    value={guestCapacity}
+                                    value={Number(guestCapacity)}
                                     onChange={(e) => setGuestCapacity(Number(e.target.value))}
                                     aria-label="Default select example"
                                 >
@@ -150,7 +162,7 @@ const AdminCreateRoomScreen = () => {
                                 </Form.Label>
                                 <Form.Select 
                                     name="numOfBeds"
-                                    value={numOfBeds}
+                                    value={Number(numOfBeds)}
                                     onChange={(e) => setNumOfBeds(Number(e.target.value))}
                                     aria-label="Default select example"
                                 >
@@ -239,6 +251,8 @@ const AdminCreateRoomScreen = () => {
                             value={Number(price)}
                             onChange={(e) => setPrice(Number(e.target.value))}
                             placeholder="Price Per Night"
+                            min="10" 
+                            max="100"
                         />
                     </FormGroup>
                     <FormGroup className="mb-3" controlId="images">
@@ -250,10 +264,11 @@ const AdminCreateRoomScreen = () => {
                             name="images"
                             onChange={uploadImagesHandler}
                             multiple
+                            required
                         />
                     </FormGroup>
                     <FormGroup className="mb-4" >
-                        <Button>
+                        <Button type="submit">
                             Create
                         </Button>
                     </FormGroup>
