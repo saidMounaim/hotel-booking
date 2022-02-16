@@ -2,6 +2,7 @@ import { Dispatch } from "redux";
 import axios from 'axios';
 import * as actions from '../constants/BookingConstants';
 import { IRoom } from "../../interfaces/IRoom";
+import { ICreateBooking } from "../../interfaces/IBooking";
 
 export const checkRoomBooking = (id: IRoom['_id'], checkInDate: Date, checkOutDate: Date) => async (dispatch: Dispatch) => {
 
@@ -27,7 +28,7 @@ export const checkRoomBooking = (id: IRoom['_id'], checkInDate: Date, checkOutDa
 
 }
 
-export const createBooking = (bookingData: {}) => async (dispatch: Dispatch, getState: any) => {
+export const createBooking = (bookingData: ICreateBooking) => async (dispatch: Dispatch, getState: any) => {
 
     try {
         dispatch({ type: actions.CREATE_BOOKING_REQUEST });

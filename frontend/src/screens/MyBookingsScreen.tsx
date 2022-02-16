@@ -5,14 +5,7 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { getMyBookings } from '../redux/actions/BookingActions';
 import moment from 'moment';
-
-
-type TMyBooking = {
-  _id: string,
-  checkInDate: Date,
-  checkOutDate: Date,
-  amountPaid: number
-}
+import { IBooking } from '../interfaces/IBooking';
 
 
 const MyBookingsScreen = () => {
@@ -46,7 +39,7 @@ const MyBookingsScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {myBookings?.map((book: TMyBooking) =>
+              {myBookings?.map((book: IBooking) =>
                 <tr key={book._id}>
                   <td>{book._id}</td>
                   <td>{moment(book.checkInDate as Date).format("LL")}</td>

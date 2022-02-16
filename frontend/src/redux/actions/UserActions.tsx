@@ -1,8 +1,9 @@
 import { Dispatch } from 'redux';
 import * as actions from '../constants/UserConstants';
 import axios from 'axios';
+import { IUpdatePassword, IUserLogin, IUserRegister } from '../../interfaces/IUser';
 
-export const login = (user: {}) => async (dispatch: Dispatch) => {
+export const login = (user: IUserLogin) => async (dispatch: Dispatch) => {
 
     try {
         
@@ -39,7 +40,7 @@ export const logout = () => (dispatch: Dispatch) => {
 
 }
 
-export const register = (user: {}) => async (dispatch: Dispatch) => {
+export const register = (user: IUserRegister) => async (dispatch: Dispatch) => {
 
     try {
         
@@ -107,7 +108,7 @@ export const updateProfile = (user: {}) => async (dispatch: Dispatch, getState: 
 
 }
 
-export const updatePassword = (user: {}) => async (dispatch: Dispatch, getState: any) => {
+export const updatePassword = (user: IUpdatePassword) => async (dispatch: Dispatch, getState: any) => {
 
     try {
         

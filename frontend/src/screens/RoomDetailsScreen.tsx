@@ -20,16 +20,11 @@ import axios from 'axios';
 import { PayPalButton } from "react-paypal-button-v2";
 import { createBooking } from '../redux/actions/BookingActions';
 import { getBookedDates } from '../redux/actions/BookingActions';
+import { IBooking } from '../interfaces/IBooking';
 
 
 type TId = {
     id: IRoom['_id']
-}
-
-type TBookingRoom = {
-    checkInDate: Date,
-    checkOutDate: Date,
-    daysOfStay: Number
 }
 
 declare global {
@@ -42,9 +37,9 @@ const RoomDetailsScreen = () => {
 
     const { loggedIn } = useAuthStatus();
 
-    const [checkInDate, setCheckInDate] = useState<TBookingRoom['checkInDate']>();
-    const [checkOutDate, setCheckOutDate] = useState<TBookingRoom['checkOutDate']>();
-    const [daysOfStay, setDaysOfStay] = useState<TBookingRoom['daysOfStay']>(0);
+    const [checkInDate, setCheckInDate] = useState<IBooking['checkInDate']>();
+    const [checkOutDate, setCheckOutDate] = useState<IBooking['checkOutDate']>();
+    const [daysOfStay, setDaysOfStay] = useState<IBooking['daysOfStay']>(0);
 
     const [sdkReady, setSdkReady] = useState<Boolean>(false);
 
@@ -66,8 +61,6 @@ const RoomDetailsScreen = () => {
     const {bookedDates} = useSelector((state: RootStateOrAny) => state.bookedDates);
 
     useEffect(() => {
-
-        console.log(bookedDates);
 
         const addPaypalScript = async () => {
             const { data: clientId } = await axios.get("/api/config/paypal");
@@ -95,8 +88,8 @@ const RoomDetailsScreen = () => {
 
     const onChange = (dates: any) => {
         const [checkInDate, checkOutDate] = dates;
-        setCheckInDate(checkInDate);
-        setCheckOutDate(checkOutDate);
+        setCheckInDate(checkInDate as Date);
+        setCheckOutDate(checkOutDate as Date);
 
         if (checkInDate && checkOutDate) {
 
@@ -130,8 +123,8 @@ const RoomDetailsScreen = () => {
 
         const bookingData = {
             room: id,
-            checkInDate: checkInDate?.toISOString(), 
-            checkOutDate: checkOutDate?.toISOString(), 
+            checkInDate, 
+            checkOutDate, 
             amountPaid, 
             paymentInfo,
             daysOfStay,

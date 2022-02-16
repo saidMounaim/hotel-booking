@@ -6,13 +6,7 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { register } from '../redux/actions/UserActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-
-type IUser = {
-    name: string,
-    email: string,
-    password: string,
-    avatar?: string
-}
+import { IUser } from '../interfaces/IUser';
 
 const RegisterScreen: React.FC = () => {
 

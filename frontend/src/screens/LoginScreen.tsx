@@ -5,11 +5,7 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { login } from '../redux/actions/UserActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-
-type IUser = {
-    email: string,
-    password: string
-}
+import { IUser } from '../interfaces/IUser';
 
 const LoginScreen: React.FC = () => {
 

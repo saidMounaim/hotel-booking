@@ -1,7 +1,10 @@
-type TReviews = {   
-    user: {},
+export interface ICreateReview {
     rating: number,
     comment: string
+}
+
+interface IReviews extends ICreateReview {   
+    user: {},
 }
 
 type TImage = {
@@ -25,6 +28,8 @@ export interface IRoom {
     ratings?: Number,
     numOfReviews?: Number,
     category: 'King' | 'Single' | 'Twins' | string,
-    reviews?: TReviews[],
+    reviews?: IReviews[],
     createdAt: Date,
 }
+
+export type TCreateRoom = Pick<IRoom, "name" | "description" | "address" | "guestCapacity" | "numOfBeds" | "category" | "internet" | "airConditioned" | "breakfast" | "petsAllowed" | "roomCleaning" | "pricePerNight" | "images" >

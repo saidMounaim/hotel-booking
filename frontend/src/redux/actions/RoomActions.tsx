@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
 import * as actions from '../constants/RoomConstants';
-import { IRoom } from '../../interfaces/IRoom';
+import { IRoom, ICreateReview, TCreateRoom } from '../../interfaces/IRoom';
 
 export const fetchRooms = (keyword: string, numOfBeds: number | string, roomType: string, currentPage: number) => 
 async (dispatch: Dispatch) => {
@@ -38,7 +38,7 @@ export const getRoomDetails = (id: IRoom['_id']) => async (dispatch: Dispatch) =
 
 }
 
-export const createRoomReview = (id: IRoom['_id'], review: {}) => async (dispatch: Dispatch, getState: any) => {
+export const createRoomReview = (id: IRoom['_id'], review: ICreateReview) => async (dispatch: Dispatch, getState: any) => {
 
     try {
         dispatch({ type: actions.ROOM_CREATE_REVIEW_REQUEST });
@@ -64,9 +64,7 @@ export const createRoomReview = (id: IRoom['_id'], review: {}) => async (dispatc
 
 }
 
-type TRoomCreate = Pick<IRoom, "name" | "description" | "address" | "guestCapacity" | "numOfBeds" | "category" | "internet" | "airConditioned" | "breakfast" | "petsAllowed" | "roomCleaning" | "pricePerNight" | "images">
-
-export const createRoom = (roomData: TRoomCreate) => async (dispatch: Dispatch, getState: any) => {
+export const createRoom = (roomData: TCreateRoom) => async (dispatch: Dispatch, getState: any) => {
 
     try {
         dispatch({ type: actions.CREATE_ROOM_REQUEST });

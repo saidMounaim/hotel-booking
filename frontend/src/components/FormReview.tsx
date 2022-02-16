@@ -17,8 +17,8 @@ const FormReview: React.FC<TFormReview> = ({ idRoom }) => {
 
     const dispatch = useDispatch();
     const [comment, setComment] = useState<string>("");
-    const [rating, setRating] = useState<Number>(0);
-    const [hover, setHover] = useState<Number>(0);
+    const [rating, setRating] = useState<number>(0);
+    const [hover, setHover] = useState<number>(0);
 
     const handleReview = (e: React.FormEvent) => {
         e.preventDefault();

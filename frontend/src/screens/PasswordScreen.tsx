@@ -5,22 +5,17 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { updatePassword } from '../redux/actions/UserActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-
-interface IUser {
-    oldPassword: string,
-    newPassword: string,
-    confirmPassword: string
-}
+import { IUpdatePassword } from '../interfaces/IUser';
 
 const PasswordScreen: React.FC = () => {
 
     const dispatch = useDispatch();
     let navigate = useNavigate();
 
-    const [oldPassword, setOldPassword] = useState<IUser['oldPassword']>("");
-    const [newPassword, setNewPassword] = useState<IUser['newPassword']>("");
-    const [confirmPassword, setConfirmPassword] = useState<IUser['confirmPassword']>("");
-    const [errConfirmPassword, setErrConfirmPassowrd] = useState<string>("");
+    const [oldPassword, setOldPassword] = useState<IUpdatePassword['oldPassword']>("");
+    const [newPassword, setNewPassword] = useState<IUpdatePassword['newPassword']>("");
+    const [confirmPassword, setConfirmPassword] = useState<IUpdatePassword['confirmPassword']>("");
+    const [errConfirmPassword, setErrConfirmPassowrd] = useState<IUpdatePassword['errConfirmPassword']>("");
 
     const { success, loading, error } = useSelector((state: RootStateOrAny) => state.passwordUpdate);
 
