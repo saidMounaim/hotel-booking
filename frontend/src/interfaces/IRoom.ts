@@ -7,7 +7,7 @@ interface IReviews extends ICreateReview {
     user: {},
 }
 
-type TImage = {
+export type TImage = {
     image: string
 }
 

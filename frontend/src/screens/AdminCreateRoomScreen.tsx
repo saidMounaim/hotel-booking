@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {  Container, Form, Row, Col, FormGroup, FloatingLabel, Button } from 'react-bootstrap';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { CREATE_ROOM_RESET } from '../redux/constants/RoomConstants';
 import { createRoom } from '../redux/actions/RoomActions';
-import { IRoom } from '../interfaces/IRoom';
+import { IRoom, TImage } from '../interfaces/IRoom';
 import Message from '../components/Message';
+import Loader from '../components/Loader';
 
 const AdminCreateRoomScreen = () => {
 
@@ -24,25 +26,13 @@ const AdminCreateRoomScreen = () => {
     const [petsAllowed, setPetsAllowed] = useState<IRoom['petsAllowed']>(false);
     const [roomCleaning, setRoomCleaning] = useState<IRoom['roomCleaning']>(false);
     const [price, setPrice] = useState<IRoom['pricePerNight']>(0);
-    const [imagesRoom, setImagesRoom] = useState<IRoom['images']>([{image: ""}]);
+    const [images, setImages] = useState<any>(null);
+
+    const [uploadRoomLoading, setUploadRoomLoading] = useState<boolean>(false);
 
     const { success, error } = useSelector((state: RootStateOrAny) => state.roomCreate);
 
-    const handlerSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        dispatch(createRoom({ name, description, address, guestCapacity, numOfBeds, category: roomType, internet, airConditioned, breakfast, petsAllowed, roomCleaning, pricePerNight: price, images: imagesRoom }));
-
-    }
-
-    useEffect(() => {
-      if(success) {
-        navigate("/");
-      }
-    }, [dispatch, success]);
-
-
-    const uploadImagesHandler = async (e: React.FormEvent) => {
+    const uploadImagesHandler = (e: React.FormEvent) => {
         
         const target = e.target as HTMLInputElement;
 
@@ -50,7 +40,14 @@ const AdminCreateRoomScreen = () => {
             return;
         }
 
-        const images = target.files;
+        const files = target.files;
+
+        setImages(files);
+
+    }
+
+    const handlerSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
 
         const formData = new FormData();
 
@@ -60,6 +57,8 @@ const AdminCreateRoomScreen = () => {
 
         try {
             
+            setUploadRoomLoading(true);
+
             const config = {
                 headers: {
                     "Content-Type": "multipart/form-data"
@@ -68,18 +67,28 @@ const AdminCreateRoomScreen = () => {
 
             const { data } = await axios.post("/api/uploads", formData, config);
 
-            const allImages = [];
+            const allImages: TImage[] = [];
             for(let i = 0; i < data.length; i++) {
-                allImages.push({ image: `/${data[i].path}` });
+                allImages.push({ image: `/${data[i].path.toString().replace("\\", "/")}` });
             }
 
-            setImagesRoom(allImages);
+            setTimeout(() => {
+                dispatch(createRoom({ name, description, address, guestCapacity, numOfBeds, category: roomType, internet, airConditioned, breakfast, petsAllowed, roomCleaning, pricePerNight: price, images: allImages }));
+                setUploadRoomLoading(false);
+                dispatch({ type: CREATE_ROOM_RESET });
+            }, 1000);
 
         } catch (error: any) {
             console.log(error.message);
         }
 
     }
+
+    useEffect(() => {
+      if(success) {
+        navigate("/");
+      }
+    }, [dispatch, success]);
 
   return (
     <Container>
@@ -269,7 +278,7 @@ const AdminCreateRoomScreen = () => {
                     </FormGroup>
                     <FormGroup className="mb-4" >
                         <Button type="submit">
-                            Create
+                            {uploadRoomLoading ? <Loader /> : `Create`}
                         </Button>
                     </FormGroup>
                 </Form>

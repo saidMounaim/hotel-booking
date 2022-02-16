@@ -86,6 +86,8 @@ export const roomCreateReducer = (state = {}, action: AnyAction) => {
                 loading: false,
                 error: action.payload
             }
+        case actions.CREATE_ROOM_RESET:
+            return {}
         default:
             return state;
     }
