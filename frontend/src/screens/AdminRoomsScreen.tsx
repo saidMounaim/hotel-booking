@@ -6,7 +6,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Paginate from '../components/Paginate';
 import { IRoom } from '../interfaces/IRoom';
-import { fetchRooms } from '../redux/actions/RoomActions';
+import { fetchRooms, deleteRoom } from '../redux/actions/RoomActions';
 
 type AdminRoom = Pick<IRoom, "_id" | "name" | "address" | "category" | "pricePerNight">
 
@@ -17,9 +17,15 @@ const AdminRoomsScreen = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { loading, rooms, count, error } = useSelector((state: RootStateOrAny) => state.roomsFetch);
 
+  const { loading: loadingDelete, success: successDelete, error: errorDelete } = useSelector((state: RootStateOrAny) => state.roomDelete);
+
+    const handleDelete = (id: IRoom['_id']) => {
+        dispatch(deleteRoom(id));
+    }
+
   useEffect(() => {
     dispatch(fetchRooms("", "", "", currentPage));
-  }, [dispatch, currentPage]);
+  }, [dispatch, currentPage, successDelete]);
 
   return (
     <Container>
@@ -59,7 +65,7 @@ const AdminRoomsScreen = () => {
                                         Edit
                                     </Button>
                                 </LinkContainer>
-                                <Button variant="danger">
+                                <Button variant="danger" onClick={() => handleDelete(room._id)}>
                                     Delete
                                 </Button>
                             </td>

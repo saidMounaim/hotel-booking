@@ -92,3 +92,26 @@ export const roomCreateReducer = (state = {}, action: AnyAction) => {
             return state;
     }
 }
+
+export const roomDeleteReducer = (state = {}, action: AnyAction) => {
+    switch (action.type) {
+        case actions.DELETE_ROOM_REQUEST:
+            return {
+                loading: true
+            };
+        case actions.DELETE_ROOM_SUCCESS:
+            return {
+                loading: false,
+                success: true
+            };
+        case actions.DELETE_ROOM_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        case actions.DELETE_ROOM_RESET:
+            return {}
+        default:
+            return state;
+    }
+}
