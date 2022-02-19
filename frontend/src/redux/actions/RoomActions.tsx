@@ -90,6 +90,33 @@ export const createRoom = (roomData: TCreateRoom) => async (dispatch: Dispatch, 
 
 }
 
+export const updateRoom = (roomId: IRoom['_id'], roomData: TCreateRoom) => async (dispatch: Dispatch, getState: any) => {
+
+    try {
+        
+        dispatch({ type: actions.UPDATE_ROOM_REQUEST });
+
+        const { userLogin: { userInfo } } = getState();
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/JSON',
+                'Authorization': `Bearer ${userInfo.token}`
+            }
+        };
+
+        await axios.put(`/api/rooms/${roomId}`, roomData, config);
+        dispatch({ type: actions.UPDATE_ROOM_SUCCESS });
+
+    } catch (error: any) {
+        dispatch({ 
+            type: actions.UPDATE_ROOM_FAIL, 
+            payload: error.response && error.response.data.message ? 
+            error.response.data.message : error.message });
+    }
+
+}
+
 export const deleteRoom = (roomId: IRoom['_id']) => async (dispatch: Dispatch, getState: any) => {
 
     try {

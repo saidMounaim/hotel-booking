@@ -93,6 +93,29 @@ export const roomCreateReducer = (state = {}, action: AnyAction) => {
     }
 }
 
+export const roomUpdateReducer = (state = {}, action: AnyAction) => {
+    switch (action.type) {
+        case actions.UPDATE_ROOM_REQUEST:
+            return {
+                loading: true
+            };
+        case actions.UPDATE_ROOM_SUCCESS:
+            return {
+                loading: false,
+                success: true
+            };
+        case actions.UPDATE_ROOM_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        case actions.UPDATE_ROOM_RESET:
+            return {}
+        default:
+            return state;
+    }
+}
+
 export const roomDeleteReducer = (state = {}, action: AnyAction) => {
     switch (action.type) {
         case actions.DELETE_ROOM_REQUEST:
