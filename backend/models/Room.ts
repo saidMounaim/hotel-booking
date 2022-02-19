@@ -75,6 +75,11 @@ const RoomSchema = new mongoose.Schema({
         default: false,
     },
 
+    breakfast: {
+        type: Boolean,
+        default: false,
+    },
+
     airConditioned: {
         type: Boolean,
         default: false,

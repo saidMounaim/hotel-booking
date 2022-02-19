@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
-import  { useParams } from 'react-router-dom'; 
+import  { useNavigate, useParams } from 'react-router-dom'; 
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { getRoomDetails } from '../redux/actions/RoomActions';
 import { IRoom, TImage } from '../interfaces/IRoom';
 import { Container, Row, Col, Form, FormGroup, Button, FloatingLabel, Image } from 'react-bootstrap';
+import { updateRoom } from '../redux/actions/RoomActions';
+import axios from 'axios';
+import { UPDATE_ROOM_RESET } from '../redux/constants/RoomConstants';
+
 
 type TId = {
   id: IRoom['_id']
@@ -15,6 +19,7 @@ const AdminEditRoomScreen = () => {
 
   const dispatch = useDispatch();
 
+  let navigate = useNavigate();
   let { id } = useParams<TId>();
 
   const [name, setName] = useState<IRoom['name']>("");
@@ -30,11 +35,18 @@ const AdminEditRoomScreen = () => {
   const [roomCleaning, setRoomCleaning] = useState<IRoom['roomCleaning']>(false);
   const [price, setPrice] = useState<IRoom['pricePerNight']>(0);
   const [oldImages, setOldImages] = useState<TImage[]>([]);
-  const [newImages, setNewImages] = useState<TImage[]>([]);
-
+  const [newImages, setNewImages] = useState<any>(null);
+  
+  const { loading: loadingUpdate, success: successUpdate, error: errorUpdate } = useSelector((state: RootStateOrAny) => state.roomUpdate);
+  
   const { room, loading, error } = useSelector((state: RootStateOrAny) => state.roomDetails);
 
   useEffect(() => {
+    if(successUpdate) {
+        dispatch(getRoomDetails(id as string));
+        navigate("/admin/rooms");
+        dispatch({ type: UPDATE_ROOM_RESET });
+    }
     if(!room?.name) {
       dispatch(getRoomDetails(id as string));
     } else {
@@ -49,17 +61,61 @@ const AdminEditRoomScreen = () => {
       setBreakfast(room.breakfast);
       setPetsAllowed(room.petsAllowed);
       setRoomCleaning(room.roomCleaning);
-      setPrice(room.price);
+      setPrice(room.pricePerNight);
       setOldImages(room.images);
     }
-  }, [dispatch, room, id]);
+  }, [dispatch, room, successUpdate, id]);
   
   const removeImage = (imageId: string) => {
-    const removedImage: any = oldImages.splice(oldImages.findIndex((e: TImage) => e._id === imageId),1);
+    const removedImage: any = oldImages.filter((e: TImage) => e._id !== imageId);
     setOldImages(removedImage);
   }
 
-  const handlerSubmit = () => {}
+    const uploadImagesHandler = (e: React.FormEvent) => {
+        
+        const target = e.target as HTMLInputElement;
+
+        if (!target.files?.length) {
+            return;
+        }
+
+        const files = target.files;
+
+        setNewImages(files);
+
+    }
+
+    const handlerSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+
+        for(let i = 0; i < newImages?.length; i++) {
+            formData.append("image", newImages[i]);
+        }
+
+        try {
+            
+            const config = {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            }
+
+            const { data } = await axios.post("/api/uploads", formData, config);
+
+            const allImages: TImage[] = oldImages;
+            for(let i = 0; i < data?.length; i++) {
+                allImages.push({ image: `/${data[i].path.toString().replace("\\", "/")}` });
+            }
+
+            dispatch(updateRoom(id as string, { name, description, address, guestCapacity, numOfBeds, category: roomType, internet, airConditioned, breakfast, petsAllowed, roomCleaning, pricePerNight: price, images: allImages }));
+
+        } catch (error: any) {
+            console.log(error.message);
+        }
+
+    }
 
   return (
     <Container>
@@ -72,6 +128,7 @@ const AdminEditRoomScreen = () => {
           <Col md={12}>
             {loading ? <Loader /> : error ? <Message variant="danger">{error}</Message> :
               <>
+                {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
                 <Form onSubmit={handlerSubmit}>
                     <FormGroup controlId="name">
                         <Form.Label>
@@ -178,7 +235,7 @@ const AdminEditRoomScreen = () => {
                             <Form.Group controlId="breakfast">
                                 <Form.Check 
                                     type="checkbox" 
-                                    label="Breakfast" 
+                                    label="Breakfast"
                                     checked={breakfast ? true : false}
                                     onChange={(e) => setBreakfast(!breakfast)}
                                 />
@@ -235,9 +292,9 @@ const AdminEditRoomScreen = () => {
                         <Form.Control 
                             type="file"
                             name="images"
-                            // onChange={uploadImagesHandler}
+                            onChange={uploadImagesHandler}
                             multiple
-                            required
+                            required={oldImages.length === 0 ? true : false}
                         />
                     </FormGroup>
                     <div className="images-preview mb-4">
@@ -257,7 +314,7 @@ const AdminEditRoomScreen = () => {
                     </div>
                     <FormGroup className="mb-4" >
                         <Button type="submit">
-                            Update
+                            {loadingUpdate ? <Loader /> : `Update`}
                         </Button>
                     </FormGroup>
                 </Form>
