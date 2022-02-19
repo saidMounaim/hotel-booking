@@ -5,6 +5,7 @@ import Header from './components/Header';
 import OnlyAdmin from './components/OnlyAdmin';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminCreateRoomScreen from './screens/AdminCreateRoomScreen';
+import AdminEditRoomScreen from './screens/AdminEditRoomScreen';
 import AdminRoomsScreen from './screens/AdminRoomsScreen';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
@@ -38,6 +39,9 @@ function App() {
               </Route>
               <Route path="/admin/rooms/create" element={<OnlyAdmin />} >
                 <Route path="/admin/rooms/create" element={<AdminCreateRoomScreen />} />
+              </Route>
+              <Route path="/admin/rooms/:id/edit" element={<OnlyAdmin />} >
+                <Route path="/admin/rooms/:id/edit" element={<AdminEditRoomScreen />} />
               </Route>
               <Route path="/room/:id" element={<RoomDetailsScreen />} />
           </Routes>

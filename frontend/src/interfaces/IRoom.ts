@@ -8,6 +8,7 @@ interface IReviews extends ICreateReview {
 }
 
 export type TImage = {
+    _id?: string,
     image: string
 }
 
