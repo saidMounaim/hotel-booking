@@ -139,11 +139,29 @@ export const getAll = asyncHandler(async (req: Request, res: Response) => {
   const page = Number(req.query.pageNumber) || 1;
   const count = await User.countDocuments();
   const users = await User.find({}).select("-password").limit(pageSize).skip(pageSize * (page - 1));
-  res.status(201).json({
+  res.status(201).json({  
       users,
       page,
       pages: Math.ceil(count / pageSize),
       count
   });
+
+})
+
+// @Desc Update user by ID
+// @Route /api/users/:id
+// @Method PUT
+export const updateUser = asyncHandler(async (req: Request, res: Response) => {
+
+  let user = await User.findById(req.params.id);
+
+  if(!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).select("-password");
+
+  res.status(201).json(user);
 
 })
