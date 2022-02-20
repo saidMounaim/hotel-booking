@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import * as actions from '../constants/UserConstants';
 import axios from 'axios';
-import { IUpdatePassword, IUserLogin, IUserRegister } from '../../interfaces/IUser';
+import { IUpdatePassword, IUser, IUserLogin, IUserRegister } from '../../interfaces/IUser';
 
 export const login = (user: IUserLogin) => async (dispatch: Dispatch) => {
 
@@ -138,8 +138,77 @@ export const updatePassword = (user: IUpdatePassword) => async (dispatch: Dispat
             dispatch<any>(logout());
         }
         dispatch({
-        type: actions.UPDATE_PASSWORD_FAIL,
-        payload: message
+            type: actions.UPDATE_PASSWORD_FAIL,
+            payload: message
+        });
+    }
+
+}
+
+
+export const fetchUsers = (currentPage: number) => async (dispatch: Dispatch, getState: any) => {
+
+    try {
+        
+        dispatch({ type: actions.FETCH_USERS_REQUEST });
+
+        const { userLogin: { userInfo } } = getState();
+
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${userInfo.token}`
+            }
+        };
+
+        const { data } = await axios.get(`/api/users/?pageNumber=${currentPage}`, config);
+
+        dispatch({ type: actions.FETCH_USERS_SUCCESS, payload: data });
+
+    } catch (error: any) {
+        const message =
+        error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        if (message === "no token, no auth") {
+            dispatch<any>(logout());
+        }
+        dispatch({
+            type: actions.FETCH_USERS_FAIL,
+            payload: message
+        });
+    }
+
+}
+
+export const deleteUser = (userId: IUser['_id']) => async (dispatch: Dispatch, getState: any) => {
+
+    try {
+        
+        dispatch({ type: actions.FETCH_USERS_REQUEST });
+
+        const { userLogin: { userInfo } } = getState();
+
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${userInfo.token}`
+            }
+        };
+
+        await axios.delete(`/api/users/${userId}`, config);
+
+        dispatch({ type: actions.DELETE_USER_SUCCESS });
+
+    } catch (error: any) {
+        const message =
+        error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        if (message === "no token, no auth") {
+            dispatch<any>(logout());
+        }
+        dispatch({
+            type: actions.DELETE_USER_FAIL,
+            payload: message
         });
     }
 

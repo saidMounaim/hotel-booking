@@ -8,6 +8,7 @@ import AdminBookingsScreen from './screens/AdminBookingsScreen';
 import AdminCreateRoomScreen from './screens/AdminCreateRoomScreen';
 import AdminEditRoomScreen from './screens/AdminEditRoomScreen';
 import AdminRoomsScreen from './screens/AdminRoomsScreen';
+import AdminUsersScreen from './screens/AdminUsersScreen';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import MyBookingsScreen from './screens/MyBookingsScreen';
@@ -46,6 +47,9 @@ function App() {
               </Route>
               <Route path="/admin/bookings" element={<OnlyAdmin />} >
                 <Route path="/admin/bookings" element={<AdminBookingsScreen />} />
+              </Route>
+              <Route path="/admin/users" element={<OnlyAdmin />} >
+                <Route path="/admin/users" element={<AdminUsersScreen />} />
               </Route>
               <Route path="/room/:id" element={<RoomDetailsScreen />} />
           </Routes>

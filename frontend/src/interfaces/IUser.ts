@@ -9,7 +9,8 @@ export interface IUserRegister extends IUserLogin {
 }
 
 export interface IUser extends IUserRegister {
-    _id: string
+    _id: string,
+    isAdmin?: boolean
 }
 
 export interface IUpdatePassword {
