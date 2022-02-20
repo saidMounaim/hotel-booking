@@ -100,6 +100,22 @@ export const getBookedDates = asyncHandler(async (req: Request, res: Response) =
 
 })
 
+// @Desc Get all bookings
+// @Route /api/bookings
+// @Method GET
+export const getAll = asyncHandler(async (req: Request, res: Response) => {
+    const pageSize = 4;
+    const page = Number(req.query.pageNumber) || 1;
+    const count = await Booking.countDocuments();
+    const bookings = await Booking.find({}).populate("room", "name").populate("user", "name email").limit(pageSize).skip(pageSize * (page - 1));
+    res.status(201).json({
+        bookings,
+        page,
+        pages: Math.ceil(count / pageSize),
+        count
+    });
+})
+
 // @Desc Delete booking 
 // @Route /api/bookings/:id
 // @Method DELETE
