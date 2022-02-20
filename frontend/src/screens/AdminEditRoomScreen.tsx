@@ -47,7 +47,7 @@ const AdminEditRoomScreen = () => {
         navigate("/admin/rooms");
         dispatch({ type: UPDATE_ROOM_RESET });
     }
-    if(!room?.name) {
+    if(!room?.name || room._id !== id) {
       dispatch(getRoomDetails(id as string));
     } else {
       setName(room.name);

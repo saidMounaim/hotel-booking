@@ -125,6 +125,31 @@ export const usersFetchReducer = (state = {}, action: any) => {
 
 }
 
+export const userDetailsReducer = (state = {}, action: any) => {
+
+    switch (action.type) {
+        case actions.GET_USER_REQUEST:
+            return {
+                loading: true
+            };
+        case actions.GET_USER_SUCCESS:
+            return {
+                loading: false,
+                user: action.payload
+            };
+        case actions.GET_USER_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            };
+        case actions.GET_USER_RESET:
+            return {};
+        default:
+            return state;
+    }
+
+}
+
 export const userDeleteReducer = (state = {}, action: any) => {
 
     switch (action.type) {

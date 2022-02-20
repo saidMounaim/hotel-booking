@@ -5,8 +5,7 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { getMyBookings } from '../redux/actions/BookingActions';
 import moment from 'moment';
-import { IBooking } from '../interfaces/IBooking';
-
+import { Link } from 'react-router-dom';
 
 const MyBookingsScreen = () => {
 
@@ -33,15 +32,21 @@ const MyBookingsScreen = () => {
             <thead>
               <tr>
                 <th>Booking ID</th>
+                <th>Room</th>
                 <th>Check In </th>
                 <th>Check Out</th>
                 <th>Amount</th>
               </tr>
             </thead>
             <tbody>
-              {myBookings?.map((book: IBooking) =>
+              {myBookings?.map((book: any) =>
                 <tr key={book._id}>
                   <td>{book._id}</td>
+                  <td>
+                    <Link to={`/room/${book.room._id}`}>
+                      {book.room.name}
+                    </Link>
+                  </td>
                   <td>{moment(book.checkInDate as Date).format("LL")}</td>
                   <td>{moment(book.checkOutDate as Date).format("LL")}</td>
                   <td>${book.amountPaid}</td>

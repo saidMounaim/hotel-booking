@@ -184,7 +184,7 @@ export const deleteUser = (userId: IUser['_id']) => async (dispatch: Dispatch, g
 
     try {
         
-        dispatch({ type: actions.FETCH_USERS_REQUEST });
+        dispatch({ type: actions.DELETE_USER_REQUEST });
 
         const { userLogin: { userInfo } } = getState();
 
@@ -208,6 +208,40 @@ export const deleteUser = (userId: IUser['_id']) => async (dispatch: Dispatch, g
         }
         dispatch({
             type: actions.DELETE_USER_FAIL,
+            payload: message
+        });
+    }
+
+}
+
+export const detailsUser = (userId: IUser['_id']) => async (dispatch: Dispatch, getState: any) => {
+
+    try {
+        
+        dispatch({ type: actions.GET_USER_REQUEST });
+
+        const { userLogin: { userInfo } } = getState();
+
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${userInfo.token}`
+            }
+        };
+
+        const { data } = await axios.get(`/api/users/${userId}`, config);
+
+        dispatch({ type: actions.GET_USER_SUCCESS, payload: data });
+
+    } catch (error: any) {
+        const message =
+        error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        if (message === "no token, no auth") {
+            dispatch<any>(logout());
+        }
+        dispatch({
+            type: actions.GET_USER_FAIL,
             payload: message
         });
     }

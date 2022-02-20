@@ -148,6 +148,22 @@ export const getAll = asyncHandler(async (req: Request, res: Response) => {
 
 })
 
+// @Desc Get single user by ID
+// @Route /api/users/:id
+// @Method GET
+export const getSingleUser = asyncHandler(async (req: Request, res: Response) => {
+
+  const user = await User.findById(req.params.id).select("-password");
+
+  if(!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  res.status(201).json(user);
+
+})
+
 // @Desc Update user by ID
 // @Route /api/users/:id
 // @Method PUT

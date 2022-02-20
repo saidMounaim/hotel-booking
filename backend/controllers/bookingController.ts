@@ -63,7 +63,7 @@ export const checkRoomIsAvailble = asyncHandler(async (req: Request, res: Respon
 // @Method GET
 export const myBookings = asyncHandler(async (req: IUserRequest, res: Response) => {
 
-    const bookings = await Booking.find({ user: req.user._id }).populate("user", "name email").populate("room", "name, images");
+    const bookings = await Booking.find({ user: req.user._id }).populate("user", "name email").populate("room", "name images");
 
     if(!bookings) {
         res.status(401);

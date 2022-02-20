@@ -7,6 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminBookingsScreen from './screens/AdminBookingsScreen';
 import AdminCreateRoomScreen from './screens/AdminCreateRoomScreen';
 import AdminEditRoomScreen from './screens/AdminEditRoomScreen';
+import AdminEditUserScreen from './screens/AdminEditUserScreen';
 import AdminRoomsScreen from './screens/AdminRoomsScreen';
 import AdminUsersScreen from './screens/AdminUsersScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -50,6 +51,9 @@ function App() {
               </Route>
               <Route path="/admin/users" element={<OnlyAdmin />} >
                 <Route path="/admin/users" element={<AdminUsersScreen />} />
+              </Route>
+              <Route path="/admin/users/:id/edit" element={<OnlyAdmin />} >
+                <Route path="/admin/users/:id/edit" element={<AdminEditUserScreen />} />
               </Route>
               <Route path="/room/:id" element={<RoomDetailsScreen />} />
           </Routes>
