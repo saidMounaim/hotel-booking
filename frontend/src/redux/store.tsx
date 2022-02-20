@@ -2,7 +2,7 @@ import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
 import { userLoginReducer, userRegisterReducer, profileUpdateReducer, passwordUpdateReducer } from './reducers/UserReducers';
 import {roomsFetchReducer, roomDetailsReducer, roomCreateReviewReducer, roomCreateReducer, roomUpdateReducer, roomDeleteReducer } from './reducers/RoomReducers';
-import { roomBookingCheckReducer, bookingCreateReducer, bookedDatesReducer, BookingsMyReducer } from './reducers/BookingReducers';
+import { bookingsFetchReducer, bookingDeleteReducer, roomBookingCheckReducer, bookingCreateReducer, bookedDatesReducer, BookingsMyReducer } from './reducers/BookingReducers';
 
 const composeEnhancer = (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
@@ -18,6 +18,8 @@ const rootReducers = combineReducers({
   roomUpdate: roomUpdateReducer,
   roomDelete: roomDeleteReducer,
   roomBookingCheck: roomBookingCheckReducer,
+  bookingsFetch: bookingsFetchReducer,
+  bookingDelete: bookingDeleteReducer,
   bookedDates: bookedDatesReducer,
   bookingCreate: bookingCreateReducer,
   BookingsMy: BookingsMyReducer

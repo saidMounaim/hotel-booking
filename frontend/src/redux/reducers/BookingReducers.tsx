@@ -96,3 +96,52 @@ export const BookingsMyReducer = (state = {}, action: AnyAction) => {
     }
 
 }
+
+export const bookingsFetchReducer = (state = {}, action: AnyAction) => {
+
+    switch (action.type) {
+        case actions.FETCH_BOOKINGS_REQUEST:
+            return {
+                loading: true,
+            };
+        case actions.FETCH_BOOKINGS_SUCCESS:
+            return {
+                loading: false,
+                bookings: action.payload.bookings,
+                page: action.payload.page,
+                pages: action.payload.pages,
+                count: action.payload.count
+            };
+        case actions.FETCH_BOOKINGS_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            };
+        default:
+            return state;
+    }
+
+}
+
+export const bookingDeleteReducer = (state = {}, action: AnyAction) => {
+
+    switch (action.type) {
+        case actions.DELETE_BOOKING_REQUEST:
+            return {
+                loading: true,
+            };
+        case actions.DELETE_BOOKING_SUCCESS:
+            return {
+                loading: false,
+                success: true
+            };
+        case actions.DELETE_BOOKING_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            };
+        default:
+            return state;
+    }
+
+}

@@ -4,6 +4,7 @@ import './App.css';
 import Header from './components/Header';
 import OnlyAdmin from './components/OnlyAdmin';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminBookingsScreen from './screens/AdminBookingsScreen';
 import AdminCreateRoomScreen from './screens/AdminCreateRoomScreen';
 import AdminEditRoomScreen from './screens/AdminEditRoomScreen';
 import AdminRoomsScreen from './screens/AdminRoomsScreen';
@@ -42,6 +43,9 @@ function App() {
               </Route>
               <Route path="/admin/rooms/:id/edit" element={<OnlyAdmin />} >
                 <Route path="/admin/rooms/:id/edit" element={<AdminEditRoomScreen />} />
+              </Route>
+              <Route path="/admin/bookings" element={<OnlyAdmin />} >
+                <Route path="/admin/bookings" element={<AdminBookingsScreen />} />
               </Route>
               <Route path="/room/:id" element={<RoomDetailsScreen />} />
           </Routes>
