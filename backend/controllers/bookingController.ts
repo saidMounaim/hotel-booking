@@ -99,3 +99,21 @@ export const getBookedDates = asyncHandler(async (req: Request, res: Response) =
     res.status(200).json(bookedDates);
 
 })
+
+// @Desc Delete booking 
+// @Route /api/bookings/:id
+// @Method DELETE
+export const deleteBooking = asyncHandler(async (req: Request, res: Response) => {
+
+    const booking = await Booking.findById(req.params.id);
+
+    if(!booking) {
+        res.status(401);
+        throw new Error("Booking not found");
+    }
+
+    await Booking.findByIdAndDelete(req.params.id);
+
+    res.status(201).json({});
+
+})
