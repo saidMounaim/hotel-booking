@@ -165,3 +165,21 @@ export const updateUser = asyncHandler(async (req: Request, res: Response) => {
   res.status(201).json(user);
 
 })
+
+// @Desc Delete user by ID
+// @Route /api/users/:id
+// @Method DELETE
+export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
+
+  let user = await User.findById(req.params.id);
+
+  if(!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  await User.findByIdAndDelete(req.params.id);
+
+  res.status(201).json({});
+
+})
