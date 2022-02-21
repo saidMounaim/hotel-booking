@@ -247,3 +247,37 @@ export const detailsUser = (userId: IUser['_id']) => async (dispatch: Dispatch, 
     }
 
 }
+
+export const updateUser = (userId: IUser['_id'], userData: {}) => async (dispatch: Dispatch, getState: any) => {
+
+    try {
+        
+        dispatch({ type: actions.UPDATE_USER_REQUEST });
+
+        const { userLogin: { userInfo } } = getState();
+
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${userInfo.token}`
+            }
+        };
+
+        await axios.put(`/api/users/${userId}`, userData, config);
+
+        dispatch({ type: actions.UPDATE_USER_SUCCESS });
+
+    } catch (error: any) {
+        const message =
+        error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        if (message === "no token, no auth") {
+            dispatch<any>(logout());
+        }
+        dispatch({
+            type: actions.UPDATE_USER_FAIL,
+            payload: message
+        });
+    }
+
+}

@@ -1,6 +1,6 @@
 import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
-import { usersFetchReducer, userDetailsReducer, userDeleteReducer, userLoginReducer, userRegisterReducer, profileUpdateReducer, passwordUpdateReducer } from './reducers/UserReducers';
+import { usersFetchReducer, userDetailsReducer, userUpdateReducer, userDeleteReducer, userLoginReducer, userRegisterReducer, profileUpdateReducer, passwordUpdateReducer } from './reducers/UserReducers';
 import {roomsFetchReducer, roomDetailsReducer, roomCreateReviewReducer, roomCreateReducer, roomUpdateReducer, roomDeleteReducer } from './reducers/RoomReducers';
 import { bookingsFetchReducer, bookingDeleteReducer, roomBookingCheckReducer, bookingCreateReducer, bookedDatesReducer, BookingsMyReducer } from './reducers/BookingReducers';
 
@@ -13,6 +13,7 @@ const rootReducers = combineReducers({
   passwordUpdate: passwordUpdateReducer,
   usersFetch: usersFetchReducer,
   userDetails: userDetailsReducer,
+  userUpdate: userUpdateReducer,
   userDelete: userDeleteReducer,
   roomsFetch: roomsFetchReducer,
   roomDetails: roomDetailsReducer,

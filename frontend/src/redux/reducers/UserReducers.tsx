@@ -142,8 +142,31 @@ export const userDetailsReducer = (state = {}, action: any) => {
                 loading: false,
                 error: action.payload
             };
-        case actions.GET_USER_RESET:
-            return {};
+        default:
+            return state;
+    }
+
+}
+
+export const userUpdateReducer = (state = {}, action: any) => {
+
+    switch (action.type) {
+        case actions.UPDATE_USER_REQUEST:
+            return {
+                loading: true
+            };
+        case actions.UPDATE_USER_SUCCESS:
+            return {
+                loading: false,
+                success: true
+            };
+        case actions.UPDATE_USER_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            };
+        case actions.UPDATE_USER_RESET:
+            return {}
         default:
             return state;
     }
